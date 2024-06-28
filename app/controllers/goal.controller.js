@@ -23,7 +23,7 @@ async function findDuplicateGoal(entry, userId){
 // Create and Save a new character name
 exports.create = async (req, res) => {
     // Validate request
-    if (req.body.name === undefined) {
+    if (req.body.title === undefined) {
         const error = new Error("Title cannot be empty for Goal");
         error.statusCode = 400;
         throw error;
@@ -55,7 +55,7 @@ exports.create = async (req, res) => {
         console.log("Goal not found");
 
         // Save Goal
-        CharacterName.create(goal).then((data) => {
+        Goal.create(goal).then((data) => {
             res.send(data);
         }).catch((err) => {
             res.status(500).send({

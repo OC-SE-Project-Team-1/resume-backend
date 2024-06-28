@@ -15,10 +15,9 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.goal = require("./goal.model.js")(sequelize, Sequelize);
 db.session = require("./session.model.js")(sequelize, Sequelize);
 db.user = require("./account.model.js")(sequelize, Sequelize);
-
+db.goal = require("./goal.model.js")(sequelize, Sequelize);
 
 // foreign key for session
 db.user.hasMany(
