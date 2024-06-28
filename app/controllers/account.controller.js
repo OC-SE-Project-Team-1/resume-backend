@@ -251,7 +251,7 @@ exports.update = async (req, res) => {
     isDuplicateUser = await findDuplicateUser(req.body.userName)
   }
 
-var isAdminmistrator = await isAdmin(req);
+const isAdminmistrator = await isAdmin(req);
 //only let user with roleId = 1(admin) to change roleId of a user
   if(req.body.roleId != null && !isAdminmistrator){
     return res.status(500).send({
@@ -301,12 +301,19 @@ var isAdminmistrator = await isAdmin(req);
 }
 
 // Delete a User with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
   if (req.body.userId === undefined ) {
     const error = new Error("userId cannot be empty");
     error.statusCode = 400;
     throw error;
+  }
+  const isAdminmistrator = await isAdmin(req)
+  if(!isAdminmistrator){
+    return  res.status(500).send({
+      message:
+        "Does not have permission to delete user",
+    });
   }
   User.destroy({
     where: { id: id },
