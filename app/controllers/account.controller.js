@@ -3,6 +3,7 @@ const User = db.user;
 const Session = db.session;
 const Op = db.Sequelize.Op;
 const { encrypt, getSalt, hashPassword } = require("../authentication/crypto");
+const { fitness } = require("googleapis/build/src/apis/fitness");
 
 async function findDuplicateEmail(entry){
   try{
@@ -52,9 +53,16 @@ exports.create = async (req, res) => {
     const error = new Error("Password cannot be empty for user!");
     error.statusCode = 400;
     throw error;
+  } else if (req.body.firstName === undefined || req.body.firstName?.trim() === "") {
+    const error = new Error("First Name cannot be empty for user!");
+    error.statusCode = 400;
+    throw error;
+  } else if (req.body.lastName === undefined || req.body.lastName?.trim() === "") {
+    const error = new Error("Last Name cannot be empty for user!");
+    error.statusCode = 400;
+    throw error;
   }
 
- 
 const isDuplicateEmail = await findDuplicateEmail(req.body.email);
 const isDuplicateUser = await findDuplicateUser(req.body.userName);
 
@@ -83,6 +91,11 @@ const isDuplicateUser = await findDuplicateUser(req.body.userName);
           id: req.body.id,
           userName: req.body.userName,
           email: req.body.email,
+          firstName : req.body.firstName,
+          lastName : req.body.lastName,
+          address : req.body.address,
+          darkMode : req.body.darkMode,
+          phoneNumber: req.body.phoneNumber,
           password: hash,
           salt: salt,
         };

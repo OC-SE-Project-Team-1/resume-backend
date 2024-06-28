@@ -7,13 +7,11 @@ const app = express();
 
 const db = require("./app/models");
 
-//const addValues = require("./addValues");
+const addValues = require("./addValues");
 db.sequelize.sync().then(()=>{
-   //addValues.create();
+   addValues.create();
 });
 
-//const addValues = require("./addValues").createDefaultValues;
-//addValues.createDefaultValues();
 
 var corsOptions = {
   origin: "http://localhost:8081",
