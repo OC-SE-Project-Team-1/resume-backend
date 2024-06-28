@@ -3,22 +3,22 @@ module.exports = (app) => {
     var router = require("express").Router();
     const { authenticateRoute } = require("../authentication/authentication.js");
   
-    // Create a new character name
+    // Create a new goal
     router.post("/goal/", goal.create);
   
-    // Retrieve all character name
+    // Retrieve all goals
     router.get("/goal/", goal.findAll);
 
-    // Retrieve all character names for a user
+    // Retrieve all goals for a user
     router.get("/goal/user/:userId", goal.findAllForUser);
   
-    // Retrieve a single character name with Id
+    // Retrieve a single goal with Id
     router.get("/goal/:id", goal.findOne);
   
-    // Update an character name with Id
+    // Update a goal with Id
     router.put("/goal/:id", goal.update);
   
-    // Delete an character name with Id
+    // Delete a goal with Id
     router.delete("/goal/:id", goal.delete);
   
     app.use("/resume", router);
