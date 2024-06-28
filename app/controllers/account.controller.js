@@ -61,6 +61,10 @@ exports.create = async (req, res) => {
     const error = new Error("Last Name cannot be empty for user!");
     error.statusCode = 400;
     throw error;
+  } else if (req.body.roleId === undefined) {
+    const error = new Error("roleId cannot be empty for user!");
+    error.statusCode = 400;
+    throw error;
   }
 
 const isDuplicateEmail = await findDuplicateEmail(req.body.email);
@@ -88,16 +92,17 @@ const isDuplicateUser = await findDuplicateUser(req.body.userName);
 
         // Create a User
         const user = {
-          id: req.body.id,
-          userName: req.body.userName,
-          email: req.body.email,
+          id : req.body.id,
+          roleId : req.body.roleId,
+          userName : req.body.userName,
+          email : req.body.email,
           firstName : req.body.firstName,
           lastName : req.body.lastName,
           address : req.body.address,
           darkMode : req.body.darkMode,
-          phoneNumber: req.body.phoneNumber,
-          password: hash,
-          salt: salt,
+          phoneNumber : req.body.phoneNumber,
+          password : hash,
+          salt : salt,
         };
 
         // Save User in the database
@@ -120,6 +125,7 @@ const isDuplicateUser = await findDuplicateUser(req.body.userName);
               let userInfo = {
                 email: user.email,
                 userName: user.userName,
+                roleId : user.roleId,
                 id: userId,               
                 token: token,
               };
@@ -213,6 +219,13 @@ exports.update = async (req, res) => {
     isDuplicateUser = await findDuplicateUser(req.body.userName)
   }
   
+  if(req.body.roleId != null){
+    return res.status(500).send({
+      message:
+        "Cannot change User Role",
+    });
+  }
+
   if (req.body.userId === undefined ) {
     const error = new Error("userId cannot be empty");
     error.statusCode = 400;

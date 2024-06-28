@@ -20,7 +20,7 @@ async function findDuplicateGoal(entry, userId){
     }
 }
 
-// Create and Save a new character name
+// Create and Save a new goal
 exports.create = async (req, res) => {
     // Validate request
     if (req.body.title === undefined) {
