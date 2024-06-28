@@ -17,7 +17,7 @@ db.sequelize = sequelize;
 
 db.session = require("./session.model.js")(sequelize, Sequelize);
 db.user = require("./account.model.js")(sequelize, Sequelize);
-
+db.goal = require("./goal.model.js")(sequelize, Sequelize);
 
 // foreign key for session
 db.user.hasMany(
@@ -30,6 +30,19 @@ db.session.belongsTo(
   { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
+
+// foreign key for goals
+db.user.hasMany(
+  db.goal,
+  { as: "goal" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.goal.belongsTo(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
 
 module.exports = db;
 
