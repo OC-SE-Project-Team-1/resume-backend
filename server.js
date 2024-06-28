@@ -7,9 +7,9 @@ const app = express();
 
 const db = require("./app/models");
 
-const addValues = require("./addValues");
+//const addValues = require("./addValues");
 db.sequelize.sync().then(()=>{
-   addValues.create();
+   //addValues.create();
 });
 
 //const addValues = require("./addValues").createDefaultValues;
@@ -35,13 +35,6 @@ app.get("/", (req, res) => {
 
 require("./app/routes/auth.routes.js")(app);
 require("./app/routes/account.routes")(app);
-require("./app/routes/genre.routes")(app);
-require("./app/routes/languages.routes.js")(app);
-require("./app/routes/timePeriod.routes")(app);
-require("./app/routes/characterRoles.routes")(app);
-require("./app/routes/location.routes.js")(app);
-require("./app/routes/characterName.routes.js")(app);
-require("./app/routes/story.routes.js")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3201;

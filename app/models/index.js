@@ -15,14 +15,9 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.characterroles = require("./characterRoles.model.js")(sequelize, Sequelize);
-db.genre = require("./genre.model.js")(sequelize, Sequelize);
+db.goal = require("./goal.model.js")(sequelize, Sequelize);
 db.session = require("./session.model.js")(sequelize, Sequelize);
 db.user = require("./account.model.js")(sequelize, Sequelize);
-db.timePeriod = require("./timePeriod.model.js")(sequelize, Sequelize);
-db.location = require ("./location.model.js")(sequelize, Sequelize);
-db.character_name = require("./characterName.model.js")(sequelize, Sequelize);
-db.story = require('./story.model.js')(sequelize, Sequelize);
 
 
 // foreign key for session
