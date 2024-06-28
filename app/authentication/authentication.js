@@ -90,38 +90,24 @@ authenticate = async (req, res, require = true) => {
 
 authenticateRoute = async (req, res, next) => {
   let auth = req.get("authorization");
-  console.log(auth);
   if (auth != null) {
-    if (
-      auth.startsWith("Bearer ") &&
-      (typeof require !== "string" || require === "token")
-    ) {
-      let token = auth.slice(7);
-      let sessionId = await decrypt(token);
-      let session = {};
-      await Session.findAll({ where: { id: sessionId } })
-        .then((data) => {
-          session = data[0];
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      if (session != null) {
-        console.log(session >= Date.now());
-        console.log(Date.now());
-        if (session.expirationDate >= Date.now()) {
-          next();
-          return;
-        } else {
-          return res.status(401).send({
-            message: "Unauthorized! Expired Token, Logout and Login again",
-          });
-        }
+   const session = await getSes(auth)
+    
+    if (session != null) {
+      console.log(session >= Date.now());
+      console.log(Date.now());
+      if (session.expirationDate >= Date.now()) {
+        next();
+        return;
       } else {
         return res.status(401).send({
           message: "Unauthorized! Expired Token, Logout and Login again",
         });
       }
+    } else {
+      return res.status(401).send({
+        message: "Unauthorized! Expired Token, Logout and Login again",
+      });
     }
   } else {
     return res.status(401).send({
@@ -149,12 +135,22 @@ async function getSes(auth){
   }
 }
 
+async function getRoleId(userId){
+  await  User.findOne({
+    where: {
+      id: userId,
+    },
+  })
+    .then((data) => {return data.roleId})
+}
+
 authenticateUserReq = async (req, res, next) =>{
   let auth = req.get("authorization");
   let session = await getSes(auth);
       //check session exist and if userId in the request belong to user
+  const roleId = await getRoleId(session.userId)
     if (session != null && (session.userId === req.body.userId || session.userId == req.params.userId
-      || session.userId === 1
+      || roleId === 1
     )) {
           next();  
     }
@@ -169,7 +165,8 @@ authenticateUserReq = async (req, res, next) =>{
     let auth = req.get("authorization");
     let session = await getSes(auth);
         //check session exist and user is an admin
-      if (session != null && session.userId === 1 ) {
+    const roleId = await getRoleId(session.userId)
+      if (session != null && roleId === 1 ) {
             next();  
       }
       else {

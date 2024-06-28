@@ -3,7 +3,6 @@ const User = db.user;
 const Session = db.session;
 const Op = db.Sequelize.Op;
 const { encrypt, getSalt, hashPassword } = require("../authentication/crypto");
-const { fitness } = require("googleapis/build/src/apis/fitness");
 
 async function findDuplicateEmail(entry){
   try{
@@ -207,6 +206,39 @@ exports.findByEmail = (req, res) => {
     });
 };
 
+//search for current session
+async function isAdmin(req){
+  let auth = req.get("authorization");
+  if (
+    auth.startsWith("Bearer ") &&
+    (typeof require !== "string" || require === "token")
+  ) {
+    let token = auth.slice(7);
+    let sessionId = await decrypt(token);
+    let session = {};
+    await Session.findAll({ where: { id: sessionId } })
+      .then((data) => {
+        session = data[0];
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      //ger roleId from userId found in session
+      const roleId = await  User.findOne({
+        where: {
+          id: session.userId,
+        },
+      })
+        .then((data) => {return data.roleId})
+      if (session != null && roleId === 1 ) {
+        return true;
+      }
+      else {
+        return false;
+      }
+  }
+}
+
 // Update a User by the id in the request
 exports.update = async (req, res) => {
   const id = req.params.id;
@@ -218,8 +250,10 @@ exports.update = async (req, res) => {
   if(req.body.userName != null){
     isDuplicateUser = await findDuplicateUser(req.body.userName)
   }
-  
-  if(req.body.roleId != null){
+
+var isAdminmistrator = await isAdmin(req);
+//only let user with roleId = 1(admin) to change roleId of a user
+  if(req.body.roleId != null && !isAdminmistrator){
     return res.status(500).send({
       message:
         "Cannot change User Role",
