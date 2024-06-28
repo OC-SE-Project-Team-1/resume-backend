@@ -136,12 +136,14 @@ async function getSes(auth){
 }
 
 async function getRoleId(userId){
+  var roleId;
   await  User.findOne({
     where: {
       id: userId,
     },
   })
-    .then((data) => {return data.roleId})
+    .then((data) => {roleId = data.roleId})
+  return roleId;
 }
 
 authenticateUserReq = async (req, res, next) =>{
@@ -164,8 +166,8 @@ authenticateUserReq = async (req, res, next) =>{
   authenticateAdmin = async (req, res, next) =>{
     let auth = req.get("authorization");
     let session = await getSes(auth);
-        //check session exist and user is an admin
-    const roleId = await getRoleId(session.userId)
+    //check session exist and user is an admin
+    var roleId = await getRoleId(session.userId)
       if (session != null && roleId === 1 ) {
             next();  
       }
