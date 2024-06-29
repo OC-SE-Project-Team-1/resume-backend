@@ -8,6 +8,12 @@ module.exports = (app) => {
   
     // Retrieve all goals
     router.get("/experience/", [authenticateRoute, authenticateAdmin], experience.findAll);
+
+    // Retrieve all experiences for a user
+    router.get("/experience/user/:userId", experience.findAllForUser);
+  
+    // Retrieve a single experience with Id
+    router.get("/experience/:id", experience.findOne);
   
     // Update a role with Id
     router.put("/experience/:id", [authenticateRoute, authenticateAdmin], experience.update);
