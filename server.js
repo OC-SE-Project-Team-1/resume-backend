@@ -36,6 +36,7 @@ require("./app/routes/account.routes")(app);
 require("./app/routes/goal.routes.js")(app);
 require("./app/routes/role.routes.js")(app);
 require("./app/routes/skill.routes.js")(app);
+require("./app/routes/experience.routes.js")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3201;
