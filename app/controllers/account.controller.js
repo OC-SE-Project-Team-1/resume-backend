@@ -52,9 +52,20 @@ exports.create = async (req, res) => {
     const error = new Error("Password cannot be empty for user!");
     error.statusCode = 400;
     throw error;
+  } else if (req.body.firstName === undefined || req.body.firstName?.trim() === "") {
+    const error = new Error("First Name cannot be empty for user!");
+    error.statusCode = 400;
+    throw error;
+  } else if (req.body.lastName === undefined || req.body.lastName?.trim() === "") {
+    const error = new Error("Last Name cannot be empty for user!");
+    error.statusCode = 400;
+    throw error;
+  } else if (req.body.roleId === undefined) {
+    const error = new Error("roleId cannot be empty for user!");
+    error.statusCode = 400;
+    throw error;
   }
 
- 
 const isDuplicateEmail = await findDuplicateEmail(req.body.email);
 const isDuplicateUser = await findDuplicateUser(req.body.userName);
 
@@ -80,11 +91,17 @@ const isDuplicateUser = await findDuplicateUser(req.body.userName);
 
         // Create a User
         const user = {
-          id: req.body.id,
-          userName: req.body.userName,
-          email: req.body.email,
-          password: hash,
-          salt: salt,
+          id : req.body.id,
+          roleId : req.body.roleId,
+          userName : req.body.userName,
+          email : req.body.email,
+          firstName : req.body.firstName,
+          lastName : req.body.lastName,
+          address : req.body.address,
+          darkMode : req.body.darkMode,
+          phoneNumber : req.body.phoneNumber,
+          password : hash,
+          salt : salt,
         };
 
         // Save User in the database
@@ -107,6 +124,7 @@ const isDuplicateUser = await findDuplicateUser(req.body.userName);
               let userInfo = {
                 email: user.email,
                 userName: user.userName,
+                roleId : user.roleId,
                 id: userId,               
                 token: token,
               };
@@ -188,6 +206,39 @@ exports.findByEmail = (req, res) => {
     });
 };
 
+//search for current session
+async function isAdmin(req){
+  let auth = req.get("authorization");
+  if (
+    auth.startsWith("Bearer ") &&
+    (typeof require !== "string" || require === "token")
+  ) {
+    let token = auth.slice(7);
+    let sessionId = await decrypt(token);
+    let session = {};
+    await Session.findAll({ where: { id: sessionId } })
+      .then((data) => {
+        session = data[0];
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      //ger roleId from userId found in session
+      const roleId = await  User.findOne({
+        where: {
+          id: session.userId,
+        },
+      })
+        .then((data) => {return data.roleId})
+      if (session != null && roleId === 1 ) {
+        return true;
+      }
+      else {
+        return false;
+      }
+  }
+}
+
 // Update a User by the id in the request
 exports.update = async (req, res) => {
   const id = req.params.id;
@@ -199,7 +250,16 @@ exports.update = async (req, res) => {
   if(req.body.userName != null){
     isDuplicateUser = await findDuplicateUser(req.body.userName)
   }
-  
+
+const isAdminmistrator = await isAdmin(req);
+//only let user with roleId = 1(admin) to change roleId of a user
+  if(req.body.roleId != null && !isAdminmistrator){
+    return res.status(500).send({
+      message:
+        "Cannot change User Role",
+    });
+  }
+
   if (req.body.userId === undefined ) {
     const error = new Error("userId cannot be empty");
     error.statusCode = 400;
@@ -241,12 +301,19 @@ exports.update = async (req, res) => {
 }
 
 // Delete a User with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
   if (req.body.userId === undefined ) {
     const error = new Error("userId cannot be empty");
     error.statusCode = 400;
     throw error;
+  }
+  const isAdminmistrator = await isAdmin(req)
+  if(!isAdminmistrator){
+    return  res.status(500).send({
+      message:
+        "Does not have permission to delete user",
+    });
   }
   User.destroy({
     where: { id: id },

@@ -7,13 +7,11 @@ const app = express();
 
 const db = require("./app/models");
 
-//const addValues = require("./addValues");
+const addValues = require("./addValues");
 db.sequelize.sync().then(()=>{
-   //addValues.create();
+   addValues.create();
 });
 
-//const addValues = require("./addValues").createDefaultValues;
-//addValues.createDefaultValues();
 
 var corsOptions = {
   origin: "http://localhost:8081",
@@ -36,6 +34,7 @@ app.get("/", (req, res) => {
 require("./app/routes/auth.routes.js")(app);
 require("./app/routes/account.routes")(app);
 require("./app/routes/goal.routes.js")(app);
+require("./app/routes/role.routes.js")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3201;

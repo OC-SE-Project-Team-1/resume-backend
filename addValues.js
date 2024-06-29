@@ -1,15 +1,34 @@
 const db = require("./app/models");
 const User = db.user;
-const Genre = db.genre;
-const CharacterRoles = db.characterroles;
-const TimePeriod = db.timePeriod;
-const Location = db.location;
-const CharacterName = db.character_name;
+const Role = db.role;
 const { encrypt, getSalt, hashPassword } = require("./app/authentication/crypto");
 
-//default values that all user can access
+//default values
 //create when first construct table and ensure items did not exist before create
 module.exports ={ create: async function(){
+
+//default roles
+Role.findOrCreate({
+  where : {id : 1},
+  defaults: {
+    title : "Administrator"
+  }
+});
+//default roles
+Role.findOrCreate({
+  where : {id : 2},
+  defaults: {
+    title : "Career Service"
+  }
+});
+//default roles
+Role.findOrCreate({
+  where : {id : 3},
+  defaults: {
+    title : "Student"
+  }
+});
+
   //admin user
   let salt = await getSalt();
   let hash = await hashPassword("password", salt);
@@ -18,158 +37,18 @@ User.findOrCreate({
   defaults: {
     userName: 'Admin',
     email: "Admin@email.com",
+    firstName: "Admin",
+    lastName : "user",
+    address: "In this web",
+    phoneNumber: "555-555-555",
+    roleId : 1,
+    darkMode: false,
     password: hash,
     salt: salt
   },
-}); 
-//Genre
-Genre.findOrCreate({
-    where: { id: 1 },
-    defaults: {
-      name: 'Adventure',
-      userId: null
-    },
-  });
-Genre.findOrCreate({
-    where: { id: 2 },
-    defaults: {
-      name: 'Action',
-      userId: null
-    },
-  });
-Genre.findOrCreate({
-    where: { id: 3 },
-    defaults: {
-      name: 'Sci-fi',
-      userId: null
-    },
-  });
-Genre.findOrCreate({
-    where: { id: 4 },
-    defaults: {
-      name: 'Comedy',
-      userId: null
-    },
-  });
-  
-//Time Period
-TimePeriod.findOrCreate({
-    where: { id: 1 },
-    defaults: {
-      name: 'Medieval',
-      userId: null
-    },
-  });
-TimePeriod.findOrCreate({
-    where: { id: 2 },
-    defaults: {
-      name: 'Future',
-      userId: null
-    },
-  });
-TimePeriod.findOrCreate({
-    where: { id: 3 },
-    defaults: {
-      name: '1800s',
-      userId: null
-    },
-  });
-TimePeriod.findOrCreate({
-    where: { id: 4 },
-    defaults: {
-      name: 'Pre-Historic',
-      userId: null
-    },
-  });  
+});
 
-//Location
-Location.findOrCreate({
-    where: { id: 1 },
-    defaults: {
-      location: 'Magical Forest',
-      userId: null
-    },
-  });
-Location.findOrCreate({
-    where: { id: 2 },
-    defaults: {
-      location: 'Europe',
-      userId: null
-    },
-  });
-Location.findOrCreate({
-    where: { id: 3 },
-    defaults: {
-    location: 'Alternate Dimension',
-      userId: null
-    },
-  });
-Location.findOrCreate({
-    where: { id: 4 },
-    defaults: {
-      location: 'Space Station',
-      userId: null
-    },
-  });
 
-//Character Roles
-CharacterRoles.findOrCreate({
-    where: { id: 1 },
-    defaults: {
-      name: 'Knight',
-      userId: null
-    },
-  });
-CharacterRoles.findOrCreate({
-    where: { id: 2 },
-    defaults: {
-      name: 'Hero',
-      userId: null
-    },
-  });
-CharacterRoles.findOrCreate({
-    where: { id: 3 },
-    defaults: {
-      name: 'Anti-Hero',
-      userId: null
-    },
-  });
-CharacterRoles.findOrCreate({
-    where: { id: 4 },
-    defaults: {
-      name: 'Farmer',
-      userId: null
-    },
-  });  
 
-//Character Names
-CharacterName.findOrCreate({
-    where: { id: 1 },
-    defaults: {
-      name: 'Sr. James Bond',
-      userId: null
-    },
-  });
-CharacterName.findOrCreate({
-    where: { id: 2 },
-    defaults: {
-      name: 'King Arthur',
-      userId: null
-    },
-  });
-CharacterName.findOrCreate({
-    where: { id: 3 },
-    defaults: {
-      name: 'Indiana Jones',
-      userId: null
-    },
-  });
-CharacterName.findOrCreate({
-    where: { id: 4 },
-    defaults: {
-      name: 'Mickey Mouse',
-      userId: null
-    },
-  }); 
-}
-}
+}//end function
+}//end export
