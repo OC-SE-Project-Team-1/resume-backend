@@ -9,5 +9,5 @@ module.exports = (app) => {
   // Logout
   router.post("/logout", auth.logout);
 
-  app.use("/fairytales", router);
+  app.use("/resume", router);
 };

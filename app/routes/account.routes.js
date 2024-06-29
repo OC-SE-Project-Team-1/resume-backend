@@ -18,5 +18,5 @@ module.exports = (app) => {
   // Delete a User with id
   router.delete("/account/:id", [authenticateRoute, authenticateUserReq], User.delete);
 
-  app.use("/fairytales", router);
+  app.use("/resume", router);
 };
