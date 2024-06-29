@@ -129,44 +129,36 @@ exports.update = async (req, res) => {
         error.statusCode = 400;
         throw error;
     }
-    const id = req.params.id;
-    //default values check
-    if (id <= 4){
-        res.status(500).send({
-            message: "Can't update default values",
+
+    const isDuplicateGoal = await findDuplicateGoal(req.body.title, req.body.userId);
+
+    if (isDuplicateGoal) {
+        return res.status(500).send({
+        message:
+            "This Goal is already in use",
+        });
+    } else {
+            console.log("Goal not found");
+
+        Goal.update(req.body, {
+            where: { id: id, userId : req.body.userId },
+        }).then((number) => {
+            if (number == 1) {
+                res.send({
+                    message: "Goal was updated successfully.",
+                });
+            } else {
+                res.send({
+                    message: `Cannot update Goal with id=${id}. Maybe Goal was not found or req.body is empty!`,
+                });
+            }
+        }).catch((err) => {
+            res.status(500).send({
+                message: err.message || "Error updating Goal with id=" + id,
+            });
         });
     }
-    else {
-
-        const isDuplicateGoal = await findDuplicateGoal(req.body.title, req.body.userId);
-
-        if (isDuplicateGoal) {
-            return res.status(500).send({
-            message:
-                "This Goal is already in use",
-            });
-        } else {
-                console.log("Goal not found");
-
-            Goal.update(req.body, {
-                where: { id: id, userId : req.body.userId },
-            }).then((number) => {
-                if (number == 1) {
-                    res.send({
-                        message: "Goal was updated successfully.",
-                    });
-                } else {
-                    res.send({
-                        message: `Cannot update Goal with id=${id}. Maybe Goal was not found or req.body is empty!`,
-                    });
-                }
-            }).catch((err) => {
-                res.status(500).send({
-                    message: err.message || "Error updating Goal with id=" + id,
-                });
-            });
-        }
-    }
+    
 };
 
 // Delete a Goal with the specified id in the request
@@ -177,29 +169,23 @@ exports.delete = (req, res) => {
         error.statusCode = 400;
         throw error;
     }
-    //default values check
-    if (id <= 4){
-        res.status(500).send({
-            message: "Can't delete default values",
-        });
-    }
-    else {
-        Goal.destroy({
-            where: { id: id, userId : req.body.userId },
-        }).then((number) => {
-            if (number == 1) {
-                res.send({
-                    message: "Goal was deleted successfully!",
-                });
-            } else {
-                res.send({
-                    message: `Cannot delete Goal with id=${id}. Maybe Goal was not found!`,
-                });
-            }
-        }).catch((err) => {
-            res.status(500).send({
-                message: err.message || "Could not delete Goal with id=" + id,
+
+    Goal.destroy({
+        where: { id: id, userId : req.body.userId },
+    }).then((number) => {
+        if (number == 1) {
+            res.send({
+                message: "Goal was deleted successfully!",
             });
+        } else {
+            res.send({
+                message: `Cannot delete Goal with id=${id}. Maybe Goal was not found!`,
+            });
+        }
+    }).catch((err) => {
+        res.status(500).send({
+            message: err.message || "Could not delete Goal with id=" + id,
         });
-    }
+    });
+    
 };
