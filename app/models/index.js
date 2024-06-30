@@ -19,6 +19,7 @@ db.session = require("./session.model.js")(sequelize, Sequelize);
 db.user = require("./account.model.js")(sequelize, Sequelize);
 db.role = require("./role.model.js")(sequelize, Sequelize);
 db.goal = require("./goal.model.js")(sequelize, Sequelize);
+db.education = require("./education.model.js")(sequelize, Sequelize);
 
 
 // foreign key for session
@@ -57,5 +58,16 @@ db.user.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
+// foreign key for education
+db.user.hasMany(
+  db.education,
+  { as: "education" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.education.belongsTo(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
 module.exports = db;
 
