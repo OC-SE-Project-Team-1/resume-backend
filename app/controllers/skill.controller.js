@@ -170,12 +170,6 @@ exports.delete = (req, res) => {
         error.statusCode = 400;
         throw error;
     }
-    //default values check
-    if (id <= 4){
-        res.status(500).send({
-            message: "Can't delete default values",
-        });
-    }
     else {
         Skill.destroy({
             where: { id: id, userId : req.body.userId },
