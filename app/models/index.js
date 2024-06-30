@@ -19,7 +19,7 @@ db.session = require("./session.model.js")(sequelize, Sequelize);
 db.user = require("./account.model.js")(sequelize, Sequelize);
 db.role = require("./role.model.js")(sequelize, Sequelize);
 db.goal = require("./goal.model.js")(sequelize, Sequelize);
-
+db.skill = require("./skill.model.js")(sequelize, Sequelize);
 
 // foreign key for session
 db.user.hasMany(
@@ -45,15 +45,15 @@ db.goal.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for user with role
-db.role.hasMany(
-  db.user,
-  { as: "user" },
+// foreign key for skills
+db.user.hasMany(
+  db.skill,
+  { as: "skill" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.user.belongsTo(
-  db.role,
-  { as: "role" },
+db.skill.belongsTo(
+  db.user,
+  { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
