@@ -76,7 +76,6 @@ exports.create = async (req, res) => {
         editing : false,
         rating : "",
         userId: req.body.userId,
-        goalId : req.body.userId
     };
 
     const isDuplicateResume = await findDuplicateResume(req.body.title, req.body.userId);
@@ -91,11 +90,12 @@ exports.create = async (req, res) => {
         
         // Save Resume
         Resume.create(resume).then((data) => {
+            //add Goals
             const goals = req.body.goalId;
-            
             goals.forEach( async (goalId) => {
-                var goal = await Goal.findByPk(goalId).then((goalItem)=> {return goalItem});
-                //console.log(goal);
+                var goal = await Goal.findOne(
+                    //find a goal that match Id and userId
+                    {where: {id : goalId, userId : req.body.userId}}).then((goalItem) => { return goalItem});
                await data.addGoal(goal)
             });
 
@@ -127,7 +127,8 @@ exports.findAll = async (req, res) => {
 
     Resume.findAll({
         where: condition, 
-        order: ["title"]
+        order: ["title"],
+        include: [{ model: Goal, as: 'Goal', }, /* Add more model as created */],
     }).then((data) => {
         res.send(data);
     }).catch((err) => {
@@ -141,7 +142,7 @@ exports.findAll = async (req, res) => {
 exports.findAllForUser = async (req, res) => {
     const userId = req.params.userId;
     const user = await getUser(req);
-    if(user.roleId == 3 && user.userId != req.params.userId){
+    if(user.roleId == 3 && user.id != userId){
         return res.status(500).send({
             message:
               "user does not have permission to retrieve resume",
@@ -152,6 +153,7 @@ exports.findAllForUser = async (req, res) => {
       order: [
         ["title"], 
       ],
+      include: [{ model: Goal, as: 'Goal', }, /* Add more model as created */],
     }).then((data) => {
         if (data) {
             res.send(data);
@@ -197,7 +199,7 @@ exports.update = async (req, res) => {
         throw error;
     }
 
-    const isDuplicateResume = await findDuplicateResume(req.body.title, req.body.userId);
+    var isDuplicateResume = (req.body.title != null) ? await findDuplicateResume(req.body.title, req.body.userId) : null;
 
     if (isDuplicateResume) {
         return res.status(500).send({
@@ -206,20 +208,21 @@ exports.update = async (req, res) => {
         });
     } else {
             console.log("Resume not found");
-
+        const user = await getUser(req);
         //user with ID = 2(Career service)
          if(req.body.comments != null && user.roleId != 2){
             return res.status(500).send({
                 message: "Cannot add/edit comment, user does not have permission",
             });
         }
+        const editing = Resume.findOne({where: { id: req.params.id, userId : req.body.userId }}).then((data)=> {return data.editing})
         if(req.body.comments != null && user.roleId == 2 && !editing){
             return res.status(500).send({
                 message: "Cannot add/edit comment, resume owner does not allow for comments",
             });
         }
         Resume.update(req.body, {
-            where: { id: id, userId : req.body.userId },
+            where: { id: req.params.id, userId : req.body.userId },
         }).then((number) => {
             if (number == 1) {
                 res.send({
