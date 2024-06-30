@@ -19,7 +19,7 @@ db.session = require("./session.model.js")(sequelize, Sequelize);
 db.user = require("./account.model.js")(sequelize, Sequelize);
 db.role = require("./role.model.js")(sequelize, Sequelize);
 db.goal = require("./goal.model.js")(sequelize, Sequelize);
-
+db.resume = require("./resume.model.js")(sequelize, Sequelize);
 
 // foreign key for session
 db.user.hasMany(
@@ -57,5 +57,32 @@ db.user.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-module.exports = db;
+// foreign key for resume with user
+db.user.hasMany(
+  db.resume,
+  { as: "resume" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.resume.belongsTo(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
 
+
+//---------------------------RESUME FOREIGN KEYS---------------------------
+db.resume.belongsToMany(
+  db.goal,
+ { as: "Goal" ,
+  through : "Resume_Goal",
+  //foreignKey: { allowNull: true }, onDelete: "CASCADE" 
+  }
+);
+db.goal.belongsToMany(
+  db.resume,
+  { as: "Resume",
+  through : "Resume_Goal",
+  //foreignKey: { allowNull: false }, onDelete: "CASCADE"
+  }
+);
+module.exports = db;
