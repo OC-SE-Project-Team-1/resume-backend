@@ -130,43 +130,36 @@ exports.update = async (req, res) => {
         throw error;
     }
     const id = req.params.id;
-    //default values check
-    if (id <= 4){
-        res.status(500).send({
-            message: "Can't update default values",
+
+    const isDuplicateSkill = await findDuplicateSkill(req.body.title, req.body.userId);
+
+    if (isDuplicateSkill) {
+        return res.status(500).send({
+        message:
+            "This Skill is already in use",
+        });
+    } else {
+            console.log("Skill not found");
+
+        Skill.update(req.body, {
+            where: { id: id, userId : req.body.userId },
+        }).then((number) => {
+            if (number == 1) {
+                res.send({
+                    message: "Skill was updated successfully.",
+                });
+            } else {
+                res.send({
+                    message: `Cannot update Skill with id=${id}. Maybe Skill was not found or req.body is empty!`,
+                });
+            }
+        }).catch((err) => {
+            res.status(500).send({
+                message: err.message || "Error updating Skill with id=" + id,
+            });
         });
     }
-    else {
-
-        const isDuplicateSkill = await findDuplicateSkill(req.body.title, req.body.userId);
-
-        if (isDuplicateSkill) {
-            return res.status(500).send({
-            message:
-                "This Skill is already in use",
-            });
-        } else {
-                console.log("Skill not found");
-
-            Skill.update(req.body, {
-                where: { id: id, userId : req.body.userId },
-            }).then((number) => {
-                if (number == 1) {
-                    res.send({
-                        message: "Skill was updated successfully.",
-                    });
-                } else {
-                    res.send({
-                        message: `Cannot update Skill with id=${id}. Maybe Skill was not found or req.body is empty!`,
-                    });
-                }
-            }).catch((err) => {
-                res.status(500).send({
-                    message: err.message || "Error updating Skill with id=" + id,
-                });
-            });
-        }
-    }
+    
 };
 
 // Delete a Skill with the specified id in the request
