@@ -5,8 +5,7 @@ const Op = db.Sequelize.Op;
 
 async function findDuplicateGoal(entry, userId){
     try{
-      const existingGoal = await Goal.findOne({where: {title: entry, [Op.or]: [{ userId: userId }, { userId: null }]}});
-  
+      const existingGoal = await Goal.findOne({where: {title: entry, userId : userId, [Op.not]: [{ id: id }]}});
       if (existingGoal){
         console.error('There is an imposter goal among us');
         return true;
@@ -44,7 +43,7 @@ exports.create = async (req, res) => {
         userId: req.body.userId
     };
 
-    const isDuplicateGoal = await findDuplicateGoal(req.body.title, req.body.userId);
+    const isDuplicateGoal = await findDuplicateGoal(req.body.title, req.body.userId, 0);
 
     if (isDuplicateGoal) {
         return res.status(500).send({
@@ -130,7 +129,7 @@ exports.update = async (req, res) => {
         throw error;
     }
 
-    const isDuplicateGoal = await findDuplicateGoal(req.body.title, req.body.userId);
+    const isDuplicateGoal = await findDuplicateGoal(req.body.title, req.body.userId, req.params.id);
 
     if (isDuplicateGoal) {
         return res.status(500).send({

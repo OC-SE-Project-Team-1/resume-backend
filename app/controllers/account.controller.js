@@ -6,7 +6,7 @@ const { encrypt, getSalt, hashPassword } = require("../authentication/crypto");
 
 async function findDuplicateEmail(entry){
   try{
-    const existingUser = await User.findOne({where: {email: entry}});
+    const existingUser = await User.findOne({where: {email: entry}, [Op.not]: [{ id: id }]});
 
     if (existingUser){
       console.error('There is an imposter email among us');
@@ -23,7 +23,7 @@ async function findDuplicateEmail(entry){
 
 async function findDuplicateUser(entry){
   try{
-    const existingUser = await User.findOne({where: {userName: entry}});
+    const existingUser = await User.findOne({where: {userName: entry}, [Op.not]: [{ id: id }]});
 
     if (existingUser){
       console.error('There is an imposter user among us');
@@ -66,8 +66,8 @@ exports.create = async (req, res) => {
     throw error;
   }
 
-const isDuplicateEmail = await findDuplicateEmail(req.body.email);
-const isDuplicateUser = await findDuplicateUser(req.body.userName);
+const isDuplicateEmail = await findDuplicateEmail(req.body.email, 0);
+const isDuplicateUser = await findDuplicateUser(req.body.userName, 0);
 
   // find by email
 
@@ -245,10 +245,10 @@ exports.update = async (req, res) => {
   var isDuplicateEmail = false
   var isDuplicateUser = false
   if(req.body.email != null){
-    isDuplicateEmail = await findDuplicateEmail(req.body.email)
+    isDuplicateEmail = await findDuplicateEmail(req.body.email, id)
   }
   if(req.body.userName != null){
-    isDuplicateUser = await findDuplicateUser(req.body.userName)
+    isDuplicateUser = await findDuplicateUser(req.body.userName, id)
   }
 
 const isAdminmistrator = await isAdmin(req);

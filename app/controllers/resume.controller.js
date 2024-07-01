@@ -7,7 +7,7 @@ const Op = db.Sequelize.Op;
 
 async function findDuplicateResume(entry, userId, id){
     try{
-      const existingResume = await Resume.findOne({where: {title: entry, userId : userId , [Op.not]: [{ id: id }]}});
+      const existingResume = await Resume.findOne({where: {title: entry, userId : userId, [Op.not]: [{ id: id }]}});
   
       if (existingResume){
         console.error('There is an imposter resume among us');
