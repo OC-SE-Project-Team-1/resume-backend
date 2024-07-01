@@ -20,6 +20,7 @@ db.user = require("./account.model.js")(sequelize, Sequelize);
 db.role = require("./role.model.js")(sequelize, Sequelize);
 db.goal = require("./goal.model.js")(sequelize, Sequelize);
 db.skill = require("./skill.model.js")(sequelize, Sequelize);
+db.experience = require("./experience.model.js")(sequelize, Sequelize);
 db.resume = require("./resume.model.js")(sequelize, Sequelize);
 
 // foreign key for session
@@ -57,6 +58,31 @@ db.skill.belongsTo(
   { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
+
+// foreign key for experiences
+db.user.hasMany(
+  db.experience,
+  { as: "experience" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.experience.belongsTo(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+// foreign key for user with role
+db.role.hasMany(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.user.belongsTo(
+  db.role,
+  { as: "role" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
 
 // foreign key for resume with user
 db.user.hasMany(
