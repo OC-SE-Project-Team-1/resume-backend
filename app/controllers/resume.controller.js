@@ -4,6 +4,8 @@ const { authenticate } = require("../authentication/authentication");
 const Goal = db.goal;
 const Skill = db.skill;
 const Experience = db.experience;
+const Education = db.education;
+//const Link = db.link;
 const User = db.user;
 const Op = db.Sequelize.Op;
 
@@ -83,7 +85,7 @@ exports.create = async (req, res) => {
             const goals = req.body.goalId;
             goals.forEach( async (goalId) => {
                 var goal = await Goal.findOne(
-                    //find a goal that match Id and userId
+                    //find a Goal that match Id and userId
                     {where: {id : goalId, userId : req.body.userId}}).then((item) => { return item});
                await data.addGoal(goal)
             });
@@ -92,19 +94,37 @@ exports.create = async (req, res) => {
             const skills = req.body.skillId;
             skills.forEach( async (skillId) => {
                 var skill = await Skill.findOne(
-                    //find a goal that match Id and userId
+                    //find a Skill that match Id and userId
                     {where: {id : skillId, userId : req.body.userId}}).then((item) => { return item});
                await data.addSkill(skill)
             });
 
-            //add Experience
+            //add Experiences
             const experiences = req.body.experienceId;
             experiences.forEach( async (experiencelId) => {
                 var experience = await Experience.findOne(
-                    //find a goal that match Id and userId
+                    //find a Experience that match Id and userId
                     {where: {id : experiencelId, userId : req.body.userId}}).then((item) => { return item});
                await data.addExperience(experience)
             });
+
+             //add Educations
+             const educations = req.body.educationId;
+             educations.forEach( async (educationId) => {
+                 var education = await Education.findOne(
+                     //find a Education that match Id and userId
+                     {where: {id : educationId, userId : req.body.userId}}).then((item) => { return item});
+                await data.addEducation(education)
+             });
+
+            //  //add Links
+            //  const links = req.body.linkId;
+            //  links.forEach( async (linkId) => {
+            //      var link = await Link.findOne(
+            //          //find a Link that match Id and userId
+            //          {where: {id : linkId, userId : req.body.userId}}).then((item) => { return item});
+            //     await data.addEducation(link)
+            //  });
 
             res.send(data);
         }).catch((err) => {
@@ -135,7 +155,8 @@ exports.findAll = async (req, res) => {
     Resume.findAll({
         where: condition, 
         order: ["title"],
-        include: [{ model: Goal, as: 'Goal' }, { model: Skill, as: 'Skill'}, { model: Experience, as: 'Experience'}/* Add more model as created */],
+        include: [{ model: Goal, as: 'Goal' }, { model: Skill, as: 'Skill'},{ model: Experience, as: 'Experience'},
+             { model: Education, as: 'Education'}/*, { model: Link, as: 'Link'} */],
     }).then((data) => {
         res.send(data);
     }).catch((err) => {
@@ -160,7 +181,8 @@ exports.findAllForUser = async (req, res) => {
       order: [
         ["title"], 
       ],
-      include: [{ model: Goal, as: 'Goal', }, { model: Skill, as: 'Skill'}, { model: Experience, as: 'Experience'} /* Add more model as created */],
+      include: [{ model: Goal, as: 'Goal', }, { model: Skill, as: 'Skill'}, { model: Experience, as: 'Experience'},
+         { model: Education, as: 'Education'}/*, { model: Link, as: 'Link'} */],
     }).then((data) => {
         if (data) {
             res.send(data);
@@ -187,7 +209,8 @@ exports.findOne = async (req, res) => {
           });
     }
     Resume.findByPk(id,{
-        include: [{ model: Goal, as: 'Goal', }, { model: Skill, as: 'Skill'}, { model: Experience, as: 'Experience'} /* Add more model as created */],   
+        include: [{ model: Goal, as: 'Goal', }, { model: Skill, as: 'Skill'}, { model: Experience, as: 'Experience'},
+             { model: Education, as: 'Education'} /*, { model: Link, as: 'Link'} */],   
     })
     .then(async (data) => {
       res.send(data);

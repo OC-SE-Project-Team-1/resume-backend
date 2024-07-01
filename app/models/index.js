@@ -96,102 +96,6 @@ db.resume.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-//---------------------------RESUME FOREIGN KEYS---------------------------
-//Resume Relationship with Goal
-db.resume.belongsToMany(
-  db.goal,
- { as: "Goal" ,
-  through : "Resume_Goal"
-  }
-);
-db.goal.belongsToMany(
-  db.resume,
-  { as: "Resume",
-  through : "Resume_Goal"
-  }
-);
-//Resume Relationship with Experience
-db.resume.belongsToMany(
-  db.experience,
- { as: "Experience" ,
-  through : "Resume_Experience"
-  }
-);
-db.experience.belongsToMany(
-  db.resume,
-  { as: "Resume",
-  through : "Resume_Experience"
-  }
-);
-//Resume Relationship with Skill
-db.resume.belongsToMany(
-  db.skill,
- { as: "Skill" ,
-  through : "Resume_Skill"
-  }
-);
-db.skill.belongsToMany(
-  db.resume,
-  { as: "Resume",
-  through : "Resume_Skill"
-  }
-);
-
-
-// foreign key for resume with user
-db.user.hasMany(
-  db.resume,
-  { as: "resume" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.resume.belongsTo(
-  db.user,
-  { as: "user" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-
-//---------------------------RESUME FOREIGN KEYS---------------------------
-//Resume Relationship with Goal
-db.resume.belongsToMany(
-  db.goal,
- { as: "Goal" ,
-  through : "Resume_Goal"
-  }
-);
-db.goal.belongsToMany(
-  db.resume,
-  { as: "Resume",
-  through : "Resume_Goal"
-  }
-);
-//Resume Relationship with Experience
-db.resume.belongsToMany(
-  db.experience,
- { as: "Experience" ,
-  through : "Resume_Experience"
-  }
-);
-db.experience.belongsToMany(
-  db.resume,
-  { as: "Resume",
-  through : "Resume_Experience"
-  }
-);
-//Resume Relationship with Skill
-db.resume.belongsToMany(
-  db.skill,
- { as: "Skill" ,
-  through : "Resume_Skill"
-  }
-);
-db.skill.belongsToMany(
-  db.resume,
-  { as: "Resume",
-  through : "Resume_Skill"
-  }
-);
-
-
 // foreign key for education
 db.user.hasMany(
   db.education,
@@ -203,5 +107,72 @@ db.education.belongsTo(
   { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
+
+//---------------------------RESUME FOREIGN KEYS---------------------------
+//Resume Relationship with Goal
+db.resume.belongsToMany(
+  db.goal,
+ { as: "Goal" ,
+  through : "Resume_Goal"
+  }
+);
+db.goal.belongsToMany(
+  db.resume,
+  { as: "Resume",
+  through : "Resume_Goal"
+  }
+);
+//Resume Relationship with Experience
+db.resume.belongsToMany(
+  db.experience,
+ { as: "Experience" ,
+  through : "Resume_Experience"
+  }
+);
+db.experience.belongsToMany(
+  db.resume,
+  { as: "Resume",
+  through : "Resume_Experience"
+  }
+);
+//Resume Relationship with Skill
+db.resume.belongsToMany(
+  db.skill,
+ { as: "Skill" ,
+  through : "Resume_Skill"
+  }
+);
+db.skill.belongsToMany(
+  db.resume,
+  { as: "Resume",
+  through : "Resume_Skill"
+  }
+);
+//Resume Relationship with Education
+db.resume.belongsToMany(
+  db.education,
+ { as: "Education" ,
+  through : "Resume_Education"
+  }
+);
+db.education.belongsToMany(
+  db.resume,
+  { as: "Resume",
+  through : "Resume_Education"
+  }
+);
+// //Resume Relationship with Link
+// db.resume.belongsToMany(
+//   db.link,
+//  { as: "Link" ,
+//   through : "Resume_Link"
+//   }
+// );
+// db.link.belongsToMany(
+//   db.resume,
+//   { as: "Resume",
+//   through : "Resume_Link"
+//   }
+// );
 
 module.exports = db;
