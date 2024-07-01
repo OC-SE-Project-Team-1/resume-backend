@@ -3,11 +3,12 @@ const User = db.user;
 const Session = db.session;
 const Op = db.Sequelize.Op;
 const { encrypt, getSalt, hashPassword } = require("../authentication/crypto");
+const { authenticate } = require("../authentication/authentication");
 
-async function findDuplicateEmail(entry){
+async function findDuplicateEmail(entry, id){
   try{
-    const existingUser = await User.findOne({where: {email: entry}, [Op.not]: [{ id: id }]});
-
+    const existingUser = await User.findOne({where: {email: entry, [Op.not]: [{ id: id }]}});
+    console.log(id);
     if (existingUser){
       console.error('There is an imposter email among us');
       return true;
@@ -21,9 +22,9 @@ async function findDuplicateEmail(entry){
   }
 }
 
-async function findDuplicateUser(entry){
+async function findDuplicateUser(entry, id){
   try{
-    const existingUser = await User.findOne({where: {userName: entry}, [Op.not]: [{ id: id }]});
+    const existingUser = await User.findOne({where: {userName: entry, [Op.not]: [{ id: id }]}});
 
     if (existingUser){
       console.error('There is an imposter user among us');
@@ -207,51 +208,24 @@ exports.findByEmail = (req, res) => {
 };
 
 //search for current session
-async function isAdmin(req){
-  let auth = req.get("authorization");
-  if (
-    auth.startsWith("Bearer ") &&
-    (typeof require !== "string" || require === "token")
-  ) {
-    let token = auth.slice(7);
-    let sessionId = await decrypt(token);
-    let session = {};
-    await Session.findAll({ where: { id: sessionId } })
-      .then((data) => {
-        session = data[0];
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-      //ger roleId from userId found in session
-      const roleId = await  User.findOne({
-        where: {
-          id: session.userId,
-        },
-      })
-        .then((data) => {return data.roleId})
-      if (session != null && roleId === 1 ) {
-        return true;
-      }
-      else {
-        return false;
-      }
+async function isAdmin(req, res){
+
+  let { userId } = await authenticate(req, res, "token");
+  let user = {};
+  if (userId !== undefined) {
+      //find and get user from db
+      await User.findByPk(userId).then(async (data) => { user = data });  
+      return (user.roleId == 1);
   }
 }
 
 // Update a User by the id in the request
 exports.update = async (req, res) => {
   const id = req.params.id;
-  var isDuplicateEmail = false
-  var isDuplicateUser = false
-  if(req.body.email != null){
-    isDuplicateEmail = await findDuplicateEmail(req.body.email, id)
-  }
-  if(req.body.userName != null){
-    isDuplicateUser = await findDuplicateUser(req.body.userName, id)
-  }
-
-const isAdminmistrator = await isAdmin(req);
+  const isDuplicateEmail = (req.body.email != null) ? await findDuplicateEmail(req.body.email, id) : false
+  const isDuplicateUser = (req.body.userName != null) ? await findDuplicateUser(req.body.userName, id) : false
+  
+const isAdminmistrator = await isAdmin(req, res);
 //only let user with roleId = 1(admin) to change roleId of a user
   if(req.body.roleId != null && !isAdminmistrator){
     return res.status(500).send({
@@ -277,6 +251,15 @@ const isAdminmistrator = await isAdmin(req);
           });
         }
         else{
+
+          if(req.body.password != null){
+            let salt = await User.findByPk(req.body.userId).then((data) => {return data.salt});
+            let hash = await hashPassword(req.body.password, salt);
+            req.body.password = hash
+          }
+          if(req.body.salt != null){
+            return  res.status(500).send({ message: "Does not have permission to cahnge salt"});
+          }
           User.update(req.body, {
             where: { id: id },
           })
@@ -308,7 +291,7 @@ exports.delete = async (req, res) => {
     error.statusCode = 400;
     throw error;
   }
-  const isAdminmistrator = await isAdmin(req)
+  const isAdminmistrator = await isAdmin(req, res)
   if(!isAdminmistrator){
     return  res.status(500).send({
       message:

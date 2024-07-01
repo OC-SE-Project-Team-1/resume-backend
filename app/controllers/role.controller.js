@@ -4,7 +4,7 @@ const Op = db.Sequelize.Op;
 
 async function findDuplicateRole(entry){
     try{
-      const existingRole = await Role.findOne({where: {title: entry}, [Op.not]: [{ id: id }]});
+      const existingRole = await Role.findOne({where: {title: entry, [Op.not]: [{ id: id }]}});
   
       if (existingRole){
         console.error('There is an imposter role among us');

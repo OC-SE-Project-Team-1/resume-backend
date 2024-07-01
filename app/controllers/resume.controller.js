@@ -1,6 +1,6 @@
 const db = require("../models");
 const Resume = db.resume;
-const Session = db.session;
+const { authenticate } = require("../authentication/authentication");
 const Goal = db.goal;
 const User = db.user;
 const Op = db.Sequelize.Op;
@@ -23,32 +23,19 @@ async function findDuplicateResume(entry, userId, id){
 }
 
 //search for current session user
-async function getUser(req){
-    let auth = req.get("authorization");
-    if (
-      auth.startsWith("Bearer ") &&
-      (typeof require !== "string" || require === "token")
-    ) {
-      let token = auth.slice(7);
-      let sessionId = await decrypt(token);
-      let session = {};
-      await Session.findAll({ where: { id: sessionId } })
-        .then((data) => {
-          session = data[0];
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-        //ger roleId from userId found in session
-        const user = await  User.findOne({
-          where: {
-            id: session.userId,
-          },
-        })
-          .then((data) => {return data})
+async function getUser(req, res){
+    //get userId from session
+    let { userId } = await authenticate(req, res, "token");
+    let user = {};
+    if (userId !== undefined) {
+        //find and get user from db
+        await User.findByPk(userId).then(async (data) => { user = data });  
         return user;
     }
-  }
+    else{
+        return res.status(500).send({ message:"This Resume is already in use"});
+    }
+}
 
 
 // Create and Save a new resume
@@ -111,7 +98,7 @@ exports.create = async (req, res) => {
 // Find all Resumes in the database
 exports.findAll = async (req, res) => {
     //check if user is a student and deny request
-    const user = await getUser(req);
+    const user = await getUser(req, res);
     if(user.roleId == 3 ){
         return res.status(500).send({
             message:
@@ -141,7 +128,7 @@ exports.findAll = async (req, res) => {
 // Find all Resumes for a user
 exports.findAllForUser = async (req, res) => {
     const userId = req.params.userId;
-    const user = await getUser(req);
+    const user = await getUser(req, res);
     if(user.roleId == 3 && user.id != userId){
         return res.status(500).send({
             message:
@@ -172,7 +159,7 @@ exports.findAllForUser = async (req, res) => {
 // Find a single Resume for a user with an id
 exports.findOne = async (req, res) => {
     const id = req.params.id;
-    const user = await getUser(req);
+    const user = await getUser(req, res);
     if(user.roleId == 3 && user.userId != req.params.userId){
         return res.status(500).send({
             message:
@@ -208,7 +195,8 @@ exports.update = async (req, res) => {
         });
     } else {
             console.log("Resume not found");
-        const user = await getUser(req);
+        const user = await getUser(req, res);
+        
         //user with ID = 2(Career service)
          if(req.body.comments != null && user.roleId != 2){
             return res.status(500).send({
@@ -251,7 +239,7 @@ exports.delete = async (req, res) => {
         throw error;
     }
     //check if user matched with ID, or if user is admon or carreer service(roleId = 2 || 3)
-    const user = await getUser(req);
+    const user = await getUser(req, res);
     //check if userId don't match for roleId 3 or if roleId is 2, deny delete request
     if ((user.userId != req.body.userId && user.roleId == 3) || user.roleId == 2){
         return res.status(500).send({
