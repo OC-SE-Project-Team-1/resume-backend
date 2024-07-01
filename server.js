@@ -35,6 +35,7 @@ require("./app/routes/auth.routes.js")(app);
 require("./app/routes/account.routes")(app);
 require("./app/routes/goal.routes.js")(app);
 require("./app/routes/role.routes.js")(app);
+require("./app/routes/education.routes.js")(app);
 require("./app/routes/skill.routes.js")(app);
 require("./app/routes/resume.routes.js")(app);
 require("./app/routes/experience.routes.js")(app);
