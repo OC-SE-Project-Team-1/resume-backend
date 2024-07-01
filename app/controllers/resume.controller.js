@@ -5,9 +5,9 @@ const Goal = db.goal;
 const User = db.user;
 const Op = db.Sequelize.Op;
 
-async function findDuplicateResume(entry, userId){
+async function findDuplicateResume(entry, userId, id){
     try{
-      const existingResume = await Resume.findOne({where: {title: entry, [Op.or]: [{ userId: userId }, { userId: null }]}});
+      const existingResume = await Resume.findOne({where: {title: entry, userId : userId , [Op.not]: [{ id: id }]}});
   
       if (existingResume){
         console.error('There is an imposter resume among us');
@@ -78,7 +78,7 @@ exports.create = async (req, res) => {
         userId: req.body.userId,
     };
 
-    const isDuplicateResume = await findDuplicateResume(req.body.title, req.body.userId);
+    const isDuplicateResume = await findDuplicateResume(req.body.title, req.body.userId, 0);
 
     if (isDuplicateResume) {
         return res.status(500).send({
@@ -199,7 +199,7 @@ exports.update = async (req, res) => {
         throw error;
     }
 
-    var isDuplicateResume = (req.body.title != null) ? await findDuplicateResume(req.body.title, req.body.userId) : null;
+    var isDuplicateResume = (req.body.title != null) ? await findDuplicateResume(req.body.title, req.body.userId, req.params.id) : null;
 
     if (isDuplicateResume) {
         return res.status(500).send({
