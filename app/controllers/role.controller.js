@@ -2,7 +2,7 @@ const db = require("../models");
 const Role = db.role;
 const Op = db.Sequelize.Op;
 
-async function findDuplicateRole(entry){
+async function findDuplicateRole(entry, id){
     try{
       const existingRole = await Role.findOne({where: {title: entry, [Op.not]: [{ id: id }]}});
   
