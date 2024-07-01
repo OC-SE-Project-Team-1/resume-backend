@@ -83,7 +83,6 @@ db.user.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-
 // foreign key for resume with user
 db.user.hasMany(
   db.resume,
@@ -96,20 +95,47 @@ db.resume.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-
 //---------------------------RESUME FOREIGN KEYS---------------------------
+//Resume Relationship with Goal
 db.resume.belongsToMany(
   db.goal,
  { as: "Goal" ,
-  through : "Resume_Goal",
-  //foreignKey: { allowNull: true }, onDelete: "CASCADE" 
+  through : "Resume_Goal"
   }
 );
 db.goal.belongsToMany(
   db.resume,
   { as: "Resume",
-  through : "Resume_Goal",
-  //foreignKey: { allowNull: false }, onDelete: "CASCADE"
+  through : "Resume_Goal"
   }
 );
+//Resume Relationship with Experience
+db.resume.belongsToMany(
+  db.experience,
+ { as: "Experience" ,
+  through : "Resume_Experience"
+  }
+);
+db.experience.belongsToMany(
+  db.resume,
+  { as: "Resume",
+  through : "Resume_Experience"
+  }
+);
+//Resume Relationship with Skill
+db.resume.belongsToMany(
+  db.skill,
+ { as: "Skill" ,
+  through : "Resume_Skill"
+  }
+);
+db.skill.belongsToMany(
+  db.resume,
+  { as: "Resume",
+  through : "Resume_Skill"
+  }
+);
+
+
+
 module.exports = db;

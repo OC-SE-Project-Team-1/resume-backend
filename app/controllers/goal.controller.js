@@ -129,7 +129,7 @@ exports.update = async (req, res) => {
         throw error;
     }
 
-    const isDuplicateGoal = await findDuplicateGoal(req.body.title, req.body.userId, req.params.id);
+    const isDuplicateGoal = (req.body.title != null) ? await findDuplicateGoal(req.body.title, req.body.userId, req.params.id) : null;
 
     if (isDuplicateGoal) {
         return res.status(500).send({

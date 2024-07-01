@@ -2,6 +2,8 @@ const db = require("../models");
 const Resume = db.resume;
 const { authenticate } = require("../authentication/authentication");
 const Goal = db.goal;
+const Skill = db.skill;
+const Experience = db.experience;
 const User = db.user;
 const Op = db.Sequelize.Op;
 
@@ -82,8 +84,26 @@ exports.create = async (req, res) => {
             goals.forEach( async (goalId) => {
                 var goal = await Goal.findOne(
                     //find a goal that match Id and userId
-                    {where: {id : goalId, userId : req.body.userId}}).then((goalItem) => { return goalItem});
+                    {where: {id : goalId, userId : req.body.userId}}).then((item) => { return item});
                await data.addGoal(goal)
+            });
+
+            //add Skills
+            const skills = req.body.skillId;
+            skills.forEach( async (skillId) => {
+                var skill = await Skill.findOne(
+                    //find a goal that match Id and userId
+                    {where: {id : skillId, userId : req.body.userId}}).then((item) => { return item});
+               await data.addSkill(skill)
+            });
+
+            //add Experience
+            const experiences = req.body.experienceId;
+            experiences.forEach( async (experiencelId) => {
+                var experience = await Experience.findOne(
+                    //find a goal that match Id and userId
+                    {where: {id : experiencelId, userId : req.body.userId}}).then((item) => { return item});
+               await data.addExperience(experience)
             });
 
             res.send(data);
@@ -115,7 +135,7 @@ exports.findAll = async (req, res) => {
     Resume.findAll({
         where: condition, 
         order: ["title"],
-        include: [{ model: Goal, as: 'Goal', }, /* Add more model as created */],
+        include: [{ model: Goal, as: 'Goal' }, { model: Skill, as: 'Skill'}, { model: Experience, as: 'Experience'}/* Add more model as created */],
     }).then((data) => {
         res.send(data);
     }).catch((err) => {
@@ -140,7 +160,7 @@ exports.findAllForUser = async (req, res) => {
       order: [
         ["title"], 
       ],
-      include: [{ model: Goal, as: 'Goal', }, /* Add more model as created */],
+      include: [{ model: Goal, as: 'Goal', }, { model: Skill, as: 'Skill'}, { model: Experience, as: 'Experience'} /* Add more model as created */],
     }).then((data) => {
         if (data) {
             res.send(data);
@@ -167,7 +187,7 @@ exports.findOne = async (req, res) => {
           });
     }
     Resume.findByPk(id,{
-        include: [{ model: Goal, as: 'Goal', }, /* Add more model as created */],   
+        include: [{ model: Goal, as: 'Goal', }, { model: Skill, as: 'Skill'}, { model: Experience, as: 'Experience'} /* Add more model as created */],   
     })
     .then(async (data) => {
       res.send(data);
