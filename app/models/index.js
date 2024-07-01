@@ -70,17 +70,18 @@ db.experience.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for user with experience
-db.user.hasMany(
-  db.experience,
+// foreign key for user with role
+db.role.hasMany(
+  db.user,
   { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.experience.belongsTo(
-  db.user,
-  { as: "experience" },
+db.user.belongsTo(
+  db.role,
+  { as: "role" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
+
 
 module.exports = db;
 
