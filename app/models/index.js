@@ -110,6 +110,28 @@ db.education.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
+// foreign key for job description
+db.user.hasMany(
+  db.jobDescription,
+  { as: "jobDescription" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.jobDescription.belongsTo(
+  db.user,
+  { as: "user" },
+)
+
+// foreign key for experienceType
+db.experienceType.hasMany(
+  db.experience,
+  { as: "experience" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.experience.belongsTo(
+  db.experienceType,
+  { as: "experienceType" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
 //---------------------------RESUME FOREIGN KEYS---------------------------
 //Resume Relationship with Goal
 db.resume.belongsToMany(
@@ -163,6 +185,19 @@ db.education.belongsToMany(
   through : "Resume_Education"
   }
 );
+//Resume Relationship with Education
+db.resume.belongsToMany(
+  db.jobDescription,
+ { as: "JobDescription" ,
+  through : "Resume_JobDescription"
+  }
+);
+db.jobDescription.belongsToMany(
+  db.resume,
+  { as: "Resume",
+  through : "Resume_JobDescription"
+  }
+);
 // //Resume Relationship with Link
 // db.resume.belongsToMany(
 //   db.link,
@@ -176,26 +211,5 @@ db.education.belongsToMany(
 //   through : "Resume_Link"
 //   }
 // );
-
-// foreign key for job description
-db.user.hasMany(
-  db.jobDescription,
-  { as: "jobDescription" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.jobDescription.belongsTo(
-  db.user,
-  { as: "user" },
-// foreign key for experienceType
-db.experienceType.hasMany(
-  db.experience,
-  { as: "experience" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.experience.belongsTo(
-  db.experienceType,
-  { as: "experienceType" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
 
 module.exports = db;

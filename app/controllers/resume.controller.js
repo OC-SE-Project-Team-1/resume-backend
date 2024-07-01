@@ -5,6 +5,7 @@ const Goal = db.goal;
 const Skill = db.skill;
 const Experience = db.experience;
 const Education = db.education;
+const JobDescription = db.jobDescription;
 //const Link = db.link;
 const User = db.user;
 const Op = db.Sequelize.Op;
@@ -117,6 +118,15 @@ exports.create = async (req, res) => {
                 await data.addEducation(education)
              });
 
+              //add Job Description
+              const jobDesciptions = req.body.jobDescriptionId;
+              jobDesciptions.forEach( async (jobDescriptionId) => {
+                  var jobDesciption = await JobDescription.findOne(
+                      //find a Job Description that match Id and userId
+                      {where: {id : jobDescriptionId, userId : req.body.userId}}).then((item) => { return item});
+                 await data.addJobDescription(jobDesciption)
+              });
+
             //  //add Links
             //  const links = req.body.linkId;
             //  links.forEach( async (linkId) => {
@@ -156,7 +166,7 @@ exports.findAll = async (req, res) => {
         where: condition, 
         order: ["title"],
         include: [{ model: Goal, as: 'Goal' }, { model: Skill, as: 'Skill'},{ model: Experience, as: 'Experience'},
-             { model: Education, as: 'Education'}/*, { model: Link, as: 'Link'} */],
+             { model: Education, as: 'Education'}, { model: JobDescription, as: 'JobDescription'}/*, { model: Link, as: 'Link'} */],
     }).then((data) => {
         res.send(data);
     }).catch((err) => {
@@ -182,7 +192,7 @@ exports.findAllForUser = async (req, res) => {
         ["title"], 
       ],
       include: [{ model: Goal, as: 'Goal', }, { model: Skill, as: 'Skill'}, { model: Experience, as: 'Experience'},
-         { model: Education, as: 'Education'}/*, { model: Link, as: 'Link'} */],
+         { model: Education, as: 'Education'}, { model: JobDescription, as: 'JobDescription'}/*, { model: Link, as: 'Link'} */],
     }).then((data) => {
         if (data) {
             res.send(data);
@@ -210,7 +220,7 @@ exports.findOne = async (req, res) => {
     }
     Resume.findByPk(id,{
         include: [{ model: Goal, as: 'Goal', }, { model: Skill, as: 'Skill'}, { model: Experience, as: 'Experience'},
-             { model: Education, as: 'Education'} /*, { model: Link, as: 'Link'} */],   
+             { model: Education, as: 'Education'}, { model: JobDescription, as: 'JobDescription'} /*, { model: Link, as: 'Link'} */],   
     })
     .then(async (data) => {
       res.send(data);
