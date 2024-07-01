@@ -14,11 +14,11 @@ module.exports = (sequelize, Sequelize) => {
       },
       endDate: {
         type: Sequelize.DATEONLY,
-        allowNull: false,
+        allowNull: true,
       },
       gradDate: {
         type: Sequelize.DATEONLY,
-        allowNull: false,
+        allowNull: true,
       },
       gpa: {
         type: Sequelize.DOUBLE,

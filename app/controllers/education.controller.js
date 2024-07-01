@@ -3,9 +3,9 @@ const Education = db.education;
 const User = db.user;
 const Op = db.Sequelize.Op;
 
-async function findDuplicateEducation(entry, userId){
+async function findDuplicateEducation(entry, userId, id){
     try{
-      const existingEducation = await Education.findOne({where: {title: entry}});
+      const existingEducation = await Education.findOne({where: {title: entry, userId: userId, [Op.not]: [{id: id}]}});
   
       if (existingEducation){
         console.error('There is an imposter education among us');
@@ -41,16 +41,6 @@ exports.create = async (req, res) => {
         error.statusCode = 400;
         throw error;
     }
-    else if (req.body.endDate === undefined) {
-        const error = new Error("End Date cannot be empty for Education");
-        error.statusCode = 400;
-        throw error;
-    }
-    else if (req.body.gradDate === undefined) {
-        const error = new Error("Grad Date cannot be empty for Education");
-        error.statusCode = 400;
-        throw error;
-    }
     else if (req.body.gpa === undefined) {
         const error = new Error("GPA  cannot be empty for Education");
         error.statusCode = 400;
@@ -74,7 +64,7 @@ exports.create = async (req, res) => {
         organization: req.body.organization
     };
 
-    const isDuplicateEducation = await findDuplicateEducation(req.body.title);
+    const isDuplicateEducation = await findDuplicateEducation(req.body.title, req.body.userId, 0);
 
     if (isDuplicateEducation) {
         return res.status(500).send({
@@ -161,7 +151,7 @@ exports.update = async (req, res) => {
     }
 
     const id = req.params.id;
-    const isDuplicateEducation = await findDuplicateEducation(req.body.title);
+    const isDuplicateEducation = (req.body.title) ? await findDuplicateEducation(req.body.title, req.body.userId, id) : null;
 
     if (isDuplicateEducation) {
         return res.status(500).send({
