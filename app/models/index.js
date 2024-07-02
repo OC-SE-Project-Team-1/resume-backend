@@ -25,6 +25,7 @@ db.experience = require("./experience.model.js")(sequelize, Sequelize);
 db.resume = require("./resume.model.js")(sequelize, Sequelize);
 db.jobDescription = require("./jobDescription.model.js")(sequelize, Sequelize);
 db.experienceType = require("./experienceType.model.js")(sequelize, Sequelize);
+db.link = require("./link.model.js")(sequelize, Sequelize);
 
 // foreign key for session
 db.user.hasMany(
@@ -119,7 +120,7 @@ db.user.hasMany(
 db.jobDescription.belongsTo(
   db.user,
   { as: "user" },
-)
+);
 
 // foreign key for experienceType
 db.experienceType.hasMany(
@@ -130,6 +131,18 @@ db.experienceType.hasMany(
 db.experience.belongsTo(
   db.experienceType,
   { as: "experienceType" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+// foreign key for Links
+db.user.hasMany(
+  db.link,
+  { as: "link" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.link.belongsTo(
+  db.user,
+  { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 //---------------------------RESUME FOREIGN KEYS---------------------------
@@ -198,18 +211,18 @@ db.jobDescription.belongsToMany(
   through : "Resume_JobDescription"
   }
 );
-// //Resume Relationship with Link
-// db.resume.belongsToMany(
-//   db.link,
-//  { as: "Link" ,
-//   through : "Resume_Link"
-//   }
-// );
-// db.link.belongsToMany(
-//   db.resume,
-//   { as: "Resume",
-//   through : "Resume_Link"
-//   }
-// );
+//Resume Relationship with Link
+db.resume.belongsToMany(
+  db.link,
+ { as: "Link" ,
+  through : "Resume_Link"
+  }
+);
+db.link.belongsToMany(
+  db.resume,
+  { as: "Resume",
+  through : "Resume_Link"
+  }
+);
 
 module.exports = db;

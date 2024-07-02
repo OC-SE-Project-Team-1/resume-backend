@@ -41,6 +41,7 @@ require("./app/routes/resume.routes.js")(app);
 require("./app/routes/experience.routes.js")(app);
 require("./app/routes/jobDescription.routes.js")(app);
 require("./app/routes/experienceType.routes.js")(app);
+require("./app/routes/link.routes.js")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3201;
