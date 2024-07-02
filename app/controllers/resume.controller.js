@@ -133,7 +133,7 @@ exports.create = async (req, res) => {
                  var link = await Link.findOne(
                      //find a Link that match Id and userId
                      {where: {id : linkId, userId : req.body.userId}}).then((item) => { return item});
-                await data.addEducation(link)
+                await data.addLink(link)
              });
 
             res.send(data);

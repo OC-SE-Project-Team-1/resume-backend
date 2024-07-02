@@ -38,15 +38,19 @@ exports.create = async (req, res) => {
         const error = new Error("User ID cannot be empty for Experience");
         error.statusCode = 400;
         throw error;
+    }   else if (req.body.experienceTypeId === undefined) {
+        const error = new Error("experience Type Id cannot be empty for Experience");
+        error.statusCode = 400;
+        throw error;
     }
-
     // Create Experience
     const exp = {
         title: req.body.title,
         description: req.body.description,
         startDate: req.body.startDate,
         endDate: req.body.endDate,
-        userId: req.body.userId
+        userId: req.body.userId,
+        experienceTypeId : req.body.experienceTypeId
     };
 
     const isDuplicateExp = await findDuplicateExp(req.body.title, req.body.userId, 0);
