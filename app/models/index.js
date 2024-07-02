@@ -24,6 +24,7 @@ db.skill = require("./skill.model.js")(sequelize, Sequelize);
 db.experience = require("./experience.model.js")(sequelize, Sequelize);
 db.jobDescription = require("./jobDescription.model.js")(sequelize, Sequelize);
 db.experienceType = require("./experienceType.model.js")(sequelize, Sequelize);
+db.link = require("./link.model.js")(sequelize, Sequelize);
 
 // foreign key for session
 db.user.hasMany(
@@ -106,6 +107,8 @@ db.user.hasMany(
 db.jobDescription.belongsTo(
   db.user,
   { as: "user" },
+);
+
 // foreign key for experienceType
 db.experienceType.hasMany(
   db.experience,
@@ -115,6 +118,18 @@ db.experienceType.hasMany(
 db.experience.belongsTo(
   db.experienceType,
   { as: "experienceType" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+// foreign key for goals
+db.user.hasMany(
+  db.link,
+  { as: "link" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.link.belongsTo(
+  db.user,
+  { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 

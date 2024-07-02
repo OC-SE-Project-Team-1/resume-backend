@@ -124,13 +124,8 @@ exports.findOne = (req, res) => {
 
 //  Update a Link by the id in the request
 exports.update = async (req, res) => {
-    if (req.body.userId === undefined) {
-        const error = new Error("User ID cannot be empty");
-        error.statusCode = 400;
-        throw error;
-    }
-
-    const isDuplicateLink = req.body.id != null ? await findDuplicateLink(req.body.url, req.body.userId, req.body.id) : null;
+    let id = req.params.id;
+    const isDuplicateLink = req.body.url != null ? await findDuplicateLink(req.body.url, req.body.userId) : null;
 
     if (isDuplicateLink) {
         return res.status(500).send({
@@ -139,7 +134,7 @@ exports.update = async (req, res) => {
         });
     } else {
         Link.update(req.body, {
-            where: { id: id, userId : req.body.userId },
+            where: { id: id },
         }).then((number) => {
             if (number == 1) {
                 res.send({
