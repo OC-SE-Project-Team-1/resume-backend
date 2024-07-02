@@ -250,17 +250,28 @@ exports.update = async (req, res) => {
             console.log("Resume not found");
         const user = await getUser(req, res);
         
-        //user with ID = 2(Career service)
+        //check if user ID = 2(Career service) and comments are filled
          if(req.body.comments != null && user.roleId != 2){
             return res.status(500).send({
                 message: "Cannot add/edit comment, user does not have permission",
             });
         }
         const editing = Resume.findOne({where: { id: req.params.id, userId : req.body.userId }}).then((data)=> {return data.editing})
-        if(req.body.comments != null && user.roleId == 2 && !editing){
-            return res.status(500).send({
-                message: "Cannot add/edit comment, resume owner does not allow for comments",
-            });
+        
+        //user with ID = 2(Career service)
+        if(user.roleId == 2){
+            //if comment are filled, but  editing = false
+            if(req.body.comments != null && !editing){
+                return res.status(500).send({message: "Cannot add/edit comment, resume owner does not allow for comments"});
+            }
+            // if other fields are filled, deny as careere service can only edit comments
+            if(req.body.title != null || req.body.content != null || req.body.rating != null || req.body.editing != null){
+                return res.status(500).send({message: "Cannot add/edit comment, resume owner does not allow for comments"});
+            }
+        }
+        //check if other students try to edit the current student resume
+        if(user.Id != req.body.userId && user.Role == 3){
+            return res.status(500).send({ message: "Cannot add/edit comment, not authorized to edit this resume",});
         }
         Resume.update(req.body, {
             where: { id: req.params.id, userId : req.body.userId },
