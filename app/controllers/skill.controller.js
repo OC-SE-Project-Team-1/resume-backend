@@ -3,9 +3,9 @@ const Skill = db.skill;
 const User = db.user;
 const Op = db.Sequelize.Op;
 
-async function findDuplicateSkill(entry, userId){
+async function findDuplicateSkill(entry, userId, id){
     try{
-      const existingSkill = await Skill.findOne({where: {title: entry, [Op.or]: [{ userId: userId }, { userId: null }]}});
+      const existingSkill = await Skill.findOne({where: {title: entry, userId: userId ,[Op.not]: [{ id: id }]}});
   
       if (existingSkill){
         console.error('There is an imposter skill among us');
@@ -44,7 +44,7 @@ exports.create = async (req, res) => {
         userId: req.body.userId
     };
 
-    const isDuplicateSkill = await findDuplicateSkill(req.body.title, req.body.userId);
+    const isDuplicateSkill = await findDuplicateSkill(req.body.title, req.body.userId, 0);
 
     if (isDuplicateSkill) {
         return res.status(500).send({
@@ -131,7 +131,7 @@ exports.update = async (req, res) => {
     }
     const id = req.params.id;
 
-    const isDuplicateSkill = await findDuplicateSkill(req.body.title, req.body.userId);
+    const isDuplicateSkill = (req.body.title) ? await findDuplicateSkill(req.body.title, req.body.userId, id) : null;
 
     if (isDuplicateSkill) {
         return res.status(500).send({

@@ -2,9 +2,9 @@ const db = require("../models");
 const Role = db.role;
 const Op = db.Sequelize.Op;
 
-async function findDuplicateRole(entry){
+async function findDuplicateRole(entry, id){
     try{
-      const existingRole = await Role.findOne({where: {title: entry}});
+      const existingRole = await Role.findOne({where: {title: entry, [Op.not]: [{ id: id }]}});
   
       if (existingRole){
         console.error('There is an imposter role among us');
@@ -33,7 +33,7 @@ exports.create = async (req, res) => {
         title: req.body.title,
     };
 
-    const isDuplicateRole = await findDuplicateRole(req.body.title);
+    const isDuplicateRole = await findDuplicateRole(req.body.title, 0);
 
     if (isDuplicateRole) {
         return res.status(500).send({
@@ -76,7 +76,7 @@ exports.findAll = (req, res) => {
 //  Update a Role by the id in the request
 exports.update = async (req, res) => {
     const id = req.params.id;
-        const isDuplicateRole = await findDuplicateRole(req.body.title);
+    const isDuplicateRole = await findDuplicateRole(req.body.title, id);
 
     if (isDuplicateRole) {
         return res.status(500).send({
