@@ -3,9 +3,9 @@ const Link = db.link;
 const User = db.user;
 const Op = db.Sequelize.Op;
 
-async function findDuplicateLink(entry, userId){
+async function findDuplicateLink(entry, userId, id){
     try{
-      const existingLink = await Link.findOne({where: {url: entry, [Op.or]: [{ userId: userId }, { userId: null }]}});
+      const existingLink = await Link.findOne({where: {url: entry, userId: userId, [Op.not]: [{id: id}]}});
   
       if (existingLink){
         console.error('There is an imposter Link among us');
@@ -44,7 +44,7 @@ exports.create = async (req, res) => {
         userId: req.body.userId
     };
 
-    const isDuplicateLink = await findDuplicateLink(req.body.url, req.body.userId);
+    const isDuplicateLink = await findDuplicateLink(req.body.url, req.body.userId, 0);
 
     if (isDuplicateLink) {
         return res.status(500).send({
@@ -125,7 +125,7 @@ exports.findOne = (req, res) => {
 //  Update a Link by the id in the request
 exports.update = async (req, res) => {
     let id = req.params.id;
-    const isDuplicateLink = req.body.url != null ? await findDuplicateLink(req.body.url, req.body.userId) : null;
+    const isDuplicateLink = req.body.url != null ? await findDuplicateLink(req.body.url, req.body.userId, id) : null;
 
     if (isDuplicateLink) {
         return res.status(500).send({
