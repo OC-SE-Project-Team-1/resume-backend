@@ -3,7 +3,7 @@ const Goal = db.goal;
 const User = db.user;
 const Op = db.Sequelize.Op;
 
-async function findDuplicateEducation(entry, userId, id){
+async function findDuplicateGoal(entry, userId, id){
     try{
       const existingGoal = await Goal.findOne({where: {title: entry, userId : userId, [Op.not]: [{ id: id }]}});
       if (existingGoal){

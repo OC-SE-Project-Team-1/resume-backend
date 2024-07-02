@@ -3,10 +3,10 @@ module.exports = (app) => {
     var router = require("express").Router();
     const { authenticateRoute, authenticateAdmin } = require("../authentication/authentication.js");
   
-    // Create a new goal
-    router.post("/experience/", [authenticateRoute, authenticateAdmin], experience.create);
+    // Create a new experience
+    router.post("/experience/", [authenticateRoute], experience.create);
   
-    // Retrieve all goals
+    // Retrieve all experiences
     router.get("/experience/", [authenticateRoute, authenticateAdmin], experience.findAll);
 
     // Retrieve all experiences for a user
@@ -15,10 +15,10 @@ module.exports = (app) => {
     // Retrieve a single experience with Id
     router.get("/experience/:id", experience.findOne);
   
-    // Update a role with Id
+    // Update a experience with Id
     router.put("/experience/:id", [authenticateRoute, authenticateAdmin], experience.update);
   
-    // Delete a role with Id
+    // Delete a experience with Id
     router.delete("/experience/:id", [authenticateRoute, authenticateAdmin], experience.delete);
   
     app.use("/resume", router);
