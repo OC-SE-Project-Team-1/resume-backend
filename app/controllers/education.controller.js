@@ -51,6 +51,31 @@ exports.create = async (req, res) => {
         error.statusCode = 400;
         throw error;
     }
+    else if (req.body.city === undefined) {
+        const error = new Error("City cannot be empty for Education");
+        error.statusCode = 400;
+        throw error;
+    }
+    else if (req.body.state === undefined) {
+        const error = new Error("State cannot be empty for Education");
+        error.statusCode = 400;
+        throw error;
+    }
+    else if (req.body.courses === undefined) {
+        const error = new Error("Courses cannot be empty for Education");
+        error.statusCode = 400;
+        throw error;
+    }
+    else if (req.body.minor === undefined) {
+        const error = new Error("Minor cannot be empty for Education");
+        error.statusCode = 400;
+        throw error;
+    }
+    else if (req.body.totalGPA === undefined) {
+        const error = new Error("Total GPA cannot be empty for Education");
+        error.statusCode = 400;
+        throw error;
+    }
 
     // Create education
     const education = {
@@ -61,7 +86,12 @@ exports.create = async (req, res) => {
         endDate: req.body.endDate,
         gradDate: req.body.gradDate,
         gpa: req.body.gpa,
-        organization: req.body.organization
+        organization: req.body.organization,
+        city: req.body.city,
+        state: req.body.state,
+        courses: req.body.courses,
+        minor: req.body.minor,
+        totalGPA: req.body.totalGPA
     };
 
     const isDuplicateEducation = await findDuplicateEducation(req.body.title, req.body.userId, 0);

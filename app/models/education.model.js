@@ -21,11 +21,31 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: true,
       },
       gpa: {
-        type: Sequelize.DOUBLE,
+        type: Sequelize.DECIMAL(3,2),
         allowNull: false,
       },
       organization: {
         type: Sequelize.TEXT,
+        allowNull: false,
+      },
+      city: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
+      state: {
+        type: Sequelize.STRING(2),
+        allowNull: false,
+      },
+      courses: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
+      minor: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
+      totalGPA: {
+        type: Sequelize.DECIMAL(3,2),
         allowNull: false,
       }
     });
