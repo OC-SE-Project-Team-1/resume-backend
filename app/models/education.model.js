@@ -25,11 +25,11 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
       },
       organization: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(50),
         allowNull: false,
       },
       city: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(50),
         allowNull: false,
       },
       state: {
