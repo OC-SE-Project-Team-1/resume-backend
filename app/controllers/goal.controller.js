@@ -2,6 +2,7 @@ const db = require("../models");
 const Goal = db.goal;
 const User = db.user;
 const Op = db.Sequelize.Op;
+const cohere = require("./cohereRequest");
 
 async function findDuplicateGoal(entry, userId, id){
     try{
@@ -187,4 +188,47 @@ exports.delete = (req, res) => {
         });
     });
     
+};
+
+//========== Cohere Functions ==========//
+function GenerateCohereRequest(settings) {
+    let request = `Write me a professional summary. My professional title is ${settings.title}.
+Some of my experiences are:`;
+
+    for (let i = 0; i < settings.experiences.length; i++) {
+        request = `${request}
+${settings.experiences[i]}`;
+    }
+    request = `${request}
+    
+Some of my achievements are:`;
+
+    for (let i = 0; i < settings.achievements.length; i++) {
+        request = `${request}
+${settings.achievements[i]}`;
+    }
+
+    request = `${request}. \n\nJump straight into the professional summary.`;
+
+    return request;
+}
+
+exports.generateAIDescription = async (req, res) => {
+    let response = "";
+    let request = "";
+    let history = [];
+
+    if (req.body.history === undefined) {
+        request = GenerateCohereRequest(req.body);
+    } else {
+        history = req.body.history;
+        request = "Give me an alternative professional summary";
+    }
+    console.log(request);
+    response = await cohere.SendCohereRequest(request, history);
+    const profSummary = {
+        description: response,
+    };
+
+    res.send(profSummary);
 };
