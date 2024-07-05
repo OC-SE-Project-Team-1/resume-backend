@@ -163,6 +163,22 @@ authenticateUserReq = async (req, res, next) =>{
     }
   }
 
+  authenticateCareerService= async (req, res, next) =>{
+    let auth = req.get("authorization");
+    let session = await getSes(auth);
+        //check session exist and if userId in the request belong to user
+    const roleId = await getRoleId(session.userId)
+      if (session != null && (roleId === 2 || roleId === 1
+      )) {
+            next();  
+      }
+      else {
+        return res.status(401).send({
+          message: "Unauthorized! signed in user Cannot request this",
+        });
+      }
+    }
+
   authenticateAdmin = async (req, res, next) =>{
     let auth = req.get("authorization");
     let session = await getSes(auth);
@@ -182,6 +198,7 @@ const auth = {
   authenticateRoute: authenticateRoute,
   authenticateAdmin : authenticateAdmin,
   authenticateUserReq: authenticateUserReq,
+  authenticateCareerService:authenticateCareerService,
 };
 
 module.exports = auth;
