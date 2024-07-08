@@ -21,3 +21,14 @@ exports.SendCohereRequest = async (request, history) => {
     return response;
 }
 
+exports.SaveAIAssist = (hist, req, res) => {
+    hist.push({ role: "USER", message: req });
+    hist.push({ role: "CHATBOT", message: res });
+    const response = {
+        description: res,
+        history: hist
+    };
+
+    return response;
+}
+
