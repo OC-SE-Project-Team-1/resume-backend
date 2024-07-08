@@ -224,11 +224,9 @@ exports.generateAIDescription = async (req, res) => {
         history = req.body.history;
         request = "Give me an alternative professional summary";
     }
-    console.log(request);
     response = await cohere.SendCohereRequest(request, history);
-    const profSummary = {
-        description: response,
-    };
+
+    let profSummary = cohere.SaveAIAssist(history, request, response);
 
     res.send(profSummary);
 };
