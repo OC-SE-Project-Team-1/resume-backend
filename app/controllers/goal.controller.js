@@ -219,6 +219,19 @@ exports.generateAIDescription = async (req, res) => {
     let history = [];
 
     if (req.body.history === undefined) {
+        if (req.body.title === undefined) {
+            const error = new Error("Title cannot be empty");
+            error.statusCode = 400;
+            throw error;
+        } else if (req.body.experiences === undefined || req.body.experiences.length < 1) {
+            const error = new Error("Experiences cannot be empty");
+            error.statusCode = 400;
+            throw error;
+        } else if (req.body.achievements === undefined || req.body.achievements.length < 1) {
+            const error = new Error("Achievements cannot be empty");
+            error.statusCode = 400;
+            throw error;
+        }
         request = GenerateCohereRequest(req.body);
     } else {
         history = req.body.history;
