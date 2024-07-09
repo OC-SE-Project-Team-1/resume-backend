@@ -40,21 +40,21 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY_2 }}
           ARGS: "-rltgoDzvO --delete"
           SOURCE: "deploy/"
-          REMOTE_HOST: "ec2-18-117-255-50.us-east-2.compute.amazonaws.com"
+          REMOTE_HOST: "ec2-35-90-191-171.us-west-2.compute.amazonaws.com"
           REMOTE_USER: ubuntu
-          TARGET: "nodeapps/fairytales-backend"
+          TARGET: "nodeapps/resume/p2t1"
       - name: Execute SSH commmands on remote server
         uses: JimCronqvist/action-ssh@master
         env:
           NAME: "Root"
         with:
 
-          hosts: "ubuntu@ec2-18-117-255-50.us-east-2.compute.amazonaws.com"
+          hosts: "ubuntu@ec2-35-90-191-171.us-west-2.compute.amazonaws.com"
           privateKey: ${{ secrets.SERVER_SSH_KEY_2 }}
           debug: false
           command: |
-            cd nodeapps/fairytales-backend
+            cd nodeapps/resume/p2t1
             sudo systemctl stop fairytales-backend
-            sudo cp fairytales-backend.service /lib/systemd/system/fairytales-backend.service
+            sudo cp resume-p2t1-backend.service /lib/systemd/system/resume-p2t1-backend.service
             sudo systemctl daemon-reload
-            sudo systemctl start fairytales-backend
+            sudo systemctl start resume-p2t1-backend
