@@ -5,6 +5,9 @@ module.exports = (app) => {
   
     // Create a new skill
     router.post("/skill/", skill.create);
+
+    // Ai assist to create desciption 
+    router.post("/skill/assist/", skill.generateAIDescription);
   
     // Retrieve all skills
     router.get("/skill/", skill.findAll);

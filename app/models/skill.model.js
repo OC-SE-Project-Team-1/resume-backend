@@ -8,6 +8,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      chatHistory: {
+        type: Sequelize.JSON,
+        allowNull: true,
+      },
     });
     return skill;
   };
