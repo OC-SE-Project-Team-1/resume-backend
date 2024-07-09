@@ -35,13 +35,18 @@ exports.create = async (req, res) => {
         const error = new Error("User ID cannot be empty for Goal");
         error.statusCode = 400;
         throw error;
+    } else if (req.body.history === undefined) {
+        const error = new Error("History cannot be empty for Goal");
+        error.statusCode = 400;
+        throw error;
     }
 
     // Create goal
     const goal = {
         title: req.body.title,
         description: req.body.description,
-        userId: req.body.userId
+        userId: req.body.userId,
+        chatHistory: req.body.history
     };
 
     const isDuplicateGoal = await findDuplicateGoal(req.body.title, req.body.userId, 0);
