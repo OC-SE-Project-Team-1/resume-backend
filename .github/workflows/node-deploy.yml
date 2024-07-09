@@ -54,7 +54,7 @@ jobs:
           debug: false
           command: |
             cd nodeapps/resume/p2t1
-            sudo systemctl stop fairytales-backend
+            sudo systemctl stop resume-p2t1-backend
             sudo cp resume-p2t1-backend.service /lib/systemd/system/resume-p2t1-backend.service
             sudo systemctl daemon-reload
             sudo systemctl start resume-p2t1-backend
