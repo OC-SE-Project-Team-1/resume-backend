@@ -212,23 +212,27 @@ exports.findAllForUser = async (req, res) => {
 exports.findOne = async (req, res) => {
     const id = req.params.id;
     const user = await getUser(req, res);
-    if(user.roleId == 3 && user.userId != req.params.userId){
-        return res.status(500).send({
-            message:
-              "user does not have permission to retrieve resume with id=" + id,
-          });
-    }
-    Resume.findByPk(id,{
+
+    const resume = await Resume.findByPk(id,{
         include: [{ model: Goal, as: 'Goal', }, { model: Skill, as: 'Skill'}, { model: Experience, as: 'Experience'},
              { model: Education, as: 'Education'}, { model: JobDescription, as: 'JobDescription'}, { model: Link, as: 'Link'}],   
     })
     .then(async (data) => {
-      res.send(data);
+      return data;
     }).catch((err) => {
       res.status(500).send({
         message: err.message || "Error retrieving Resume with id=" + id,
       });
     })
+
+    if(user.roleId == 3 && user.id != resume.userId){
+        return res.status(500).send({
+            message:
+              "user does not have permission to retrieve resume with id=" + id,
+          });
+    }
+
+    res.send(resume)
 };
 
 //  Update a Resume by the id in the request
@@ -301,15 +305,6 @@ exports.delete = async (req, res) => {
         const error = new Error("User ID cannot be empty");
         error.statusCode = 400;
         throw error;
-    }
-    //check if user matched with ID, or if user is admon or carreer service(roleId = 2 || 3)
-    const user = await getUser(req, res);
-    //check if userId don't match for roleId 3 or if roleId is 2, deny delete request
-    if ((user.userId != req.body.userId && user.roleId == 3) || user.roleId == 2){
-        return res.status(500).send({
-            message:
-                "User does not have permission to delete resume",
-            });
     }
 
     Resume.destroy({
