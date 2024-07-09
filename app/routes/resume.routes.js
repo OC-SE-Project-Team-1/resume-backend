@@ -20,6 +20,9 @@ module.exports = (app) => {
   
     // Delete a resume with Id
     router.delete("/resumes/:id", [authenticateRoute, authenticateUserReq], resume.delete);
+
+    // Resume Feedback
+    router.post("/resumes/jobFeedback", resume.getJobFeedback);
   
     app.use("/resume", router);
   };

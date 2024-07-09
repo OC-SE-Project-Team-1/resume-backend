@@ -1,6 +1,7 @@
 const db = require("../models");
 const Resume = db.resume;
 const { authenticate } = require("../authentication/authentication");
+const resumeModel = require("../models/resume.model");
 const Goal = db.goal;
 const Skill = db.skill;
 const Experience = db.experience;
@@ -9,6 +10,7 @@ const JobDescription = db.jobDescription;
 const Link = db.link;
 const User = db.user;
 const Op = db.Sequelize.Op;
+const cohere = require("./cohereRequest");
 
 async function findDuplicateResume(entry, userId, id){
     try{
@@ -330,4 +332,49 @@ exports.delete = async (req, res) => {
         });
     });
     
+};
+
+//========== Cohere Functions ==========//
+function GenerateCohereRequest(resume, jobDesc) {
+    let request = `I have a job I want to apply for. Can you tell me if my resume is a good fit for this job? 
+    
+Here is the job description:
+${jobDesc}
+    
+Here is my Resume:
+${resume}
+
+Please give me feedback on how to improve my resume if necessary.`;
+
+    return request;
+}
+
+exports.getJobFeedback = async (req, res) => {
+    if (req.body.resumeId === undefined) {
+        const error = new Error("Resume ID cannot be empty");
+        error.statusCode = 400;
+        throw error;
+    } else if (req.body.jobDescId === undefined) {
+        const error = new Error("Job Description ID cannot be empty");
+        error.statusCode = 400;
+        throw error;
+    }
+
+    // Retrieve Job Description and Resume
+    let resume = await Resume.findByPk(req.body.resumeId).catch((err) => {
+        res.status(500).send({
+          message: err.message || "Error retrieving Resume with id=" + id,
+        });
+    });
+    let jobDesc = await JobDescription.findByPk(req.body.jobDescId).catch((err) => {
+        res.status(500).send({
+          message: err.message || "Error retrieving Job Description with id=" + id,
+        });
+    });
+    
+    // Create request and send to Cohere
+    let request = GenerateCohereRequest(resume.content, jobDesc.description);
+    let response = await cohere.SendCohereRequest(request, []);
+
+    res.send(response);
 };
