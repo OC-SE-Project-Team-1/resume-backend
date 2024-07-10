@@ -1,13 +1,13 @@
 module.exports = (app) => {
     const resume = require("../controllers/resume.controller.js");
     var router = require("express").Router();
-    const { authenticateRoute, authenticateUserReq } = require("../authentication/authentication.js");
+    const { authenticateRoute, authenticateUserReq, authenticateCareerService } = require("../authentication/authentication.js");
   
     // Create a new resume
     router.post("/resumes/", [authenticateRoute, authenticateUserReq], resume.create);
   
     // Retrieve all resumes
-    router.get("/resumes/", [authenticateRoute], resume.findAll);
+    router.get("/resumes/", [authenticateRoute, authenticateCareerService], resume.findAll);
 
     // Retrieve all resumes for a user
     router.get("/resumes/user/:userId", [authenticateRoute], resume.findAllForUser);
@@ -21,5 +21,5 @@ module.exports = (app) => {
     // Delete a resume with Id
     router.delete("/resumes/:id", [authenticateRoute, authenticateUserReq], resume.delete);
   
-    app.use("/resume", router);
+    app.use("/resume-p2t1", router);
   };

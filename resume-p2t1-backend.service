@@ -1,11 +1,11 @@
 [Unit]
-Description=NodeJS Fairytales Backend
+Description=Resume Backend
 After=network.target
 
 [Service]
 Type=simple
 User=ubuntu
-WorkingDirectory=/home/ubuntu/nodeapps/fairytales-backend/
+WorkingDirectory=/home/ubuntu/nodeapps/resume/p2t1/
 ExecStart=/usr/bin/npm run start
 Restart=on-failure
 

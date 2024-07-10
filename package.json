@@ -6,7 +6,7 @@
     "scripts": {
         "test": "jest --",
         "start": "node server.js",
-        "bundle": "mkdir deploy && cp -r app server.js addValues.js package.json package-lock.json fairytales-backend.service .env deploy"
+        "bundle": "mkdir deploy && cp -r app server.js addValues.js package.json package-lock.json resume-p2t1-backend.service .env deploy"
     },
     "keywords": [
         "node.js",
@@ -21,7 +21,6 @@
         "cors": "^2.8.5",
         "dotenv": "^16.0.0",
         "express": "^4.17.3",
-        "googleapis": "^118.0.0",
         "jest": "^29.3.1",
         "jsonwebtoken": "^9.0.0",
         "mysql2": "^3.2.3",

@@ -2,6 +2,7 @@ const db = require("../models");
 const Goal = db.goal;
 const User = db.user;
 const Op = db.Sequelize.Op;
+const cohere = require("./cohereRequest");
 
 async function findDuplicateGoal(entry, userId, id){
     try{
@@ -34,13 +35,18 @@ exports.create = async (req, res) => {
         const error = new Error("User ID cannot be empty for Goal");
         error.statusCode = 400;
         throw error;
+    } else if (req.body.history === undefined) {
+        const error = new Error("History cannot be empty for Goal");
+        error.statusCode = 400;
+        throw error;
     }
 
     // Create goal
     const goal = {
         title: req.body.title,
         description: req.body.description,
-        userId: req.body.userId
+        userId: req.body.userId,
+        chatHistory: req.body.history
     };
 
     const isDuplicateGoal = await findDuplicateGoal(req.body.title, req.body.userId, 0);
@@ -187,4 +193,58 @@ exports.delete = (req, res) => {
         });
     });
     
+};
+
+//========== Cohere Functions ==========//
+function GenerateCohereRequest(settings) {
+    let request = `Write me a professional summary. My professional title is ${settings.title}.
+Some of my experiences are:`;
+
+    for (let i = 0; i < settings.experiences.length; i++) {
+        request = `${request}
+${settings.experiences[i]}`;
+    }
+    request = `${request}
+    
+Some of my achievements are:`;
+
+    for (let i = 0; i < settings.achievements.length; i++) {
+        request = `${request}
+${settings.achievements[i]}`;
+    }
+
+    request = `${request}. \n\nJump straight into the professional summary.`;
+
+    return request;
+}
+
+exports.generateAIDescription = async (req, res) => {
+    let response = "";
+    let request = "";
+    let history = [];
+
+    if (req.body.history === undefined) {
+        if (req.body.title === undefined) {
+            const error = new Error("Title cannot be empty");
+            error.statusCode = 400;
+            throw error;
+        } else if (req.body.experiences === undefined || req.body.experiences.length < 1) {
+            const error = new Error("Experiences cannot be empty");
+            error.statusCode = 400;
+            throw error;
+        } else if (req.body.achievements === undefined || req.body.achievements.length < 1) {
+            const error = new Error("Achievements cannot be empty");
+            error.statusCode = 400;
+            throw error;
+        }
+        request = GenerateCohereRequest(req.body);
+    } else {
+        history = req.body.history;
+        request = "Give me an alternative professional summary";
+    }
+    response = await cohere.SendCohereRequest(request, history);
+
+    let profSummary = cohere.SaveAIAssist(history, request, response);
+
+    res.send(profSummary);
 };

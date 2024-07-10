@@ -15,5 +15,5 @@ module.exports = (app) => {
     // Delete a role with Id
     router.delete("/role/:id", [authenticateRoute, authenticateAdmin], role.delete);
   
-    app.use("/resume", router);
+    app.use("/resume-p2t1", router);
   };
