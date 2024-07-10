@@ -21,5 +21,5 @@ module.exports = (app) => {
     // Delete a jobDescription with Id
     router.delete("/jobDescription/:id", jobDescription.delete);
   
-    app.use("/resume", router);
+    app.use("/resume-p2t1", router);
   };

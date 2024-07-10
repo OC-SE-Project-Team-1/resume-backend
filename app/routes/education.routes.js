@@ -21,5 +21,5 @@ module.exports = (app) => {
     // Delete a education with Id
     router.delete("/education/:id", education.delete);
   
-    app.use("/resume", router);
+    app.use("/resume-p2t1", router);
   };
