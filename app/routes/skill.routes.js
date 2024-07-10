@@ -21,5 +21,5 @@ module.exports = (app) => {
     // Delete a skill with Id
     router.delete("/skill/:id", skill.delete);
   
-    app.use("/resume", router);
+    app.use("/resume-p2t1", router);
   };
