@@ -8,6 +8,7 @@ const Goal = db.goal;
 const JobDescription = db.jobDescription;
 const Link = db.link;
 const Skill = db.skill;
+const Resume = db.resume;
 const { encrypt, getSalt, hashPassword } = require("./app/authentication/crypto");
 
 //default values
@@ -248,5 +249,23 @@ exports.testCreate = async () => {
       description: "Experience with the Spanish language",
       userId: 3
     },
+  });
+
+  Resume.findOrCreate({
+    where: { id: 1 },
+    defaults: {
+      title: "Resume 1",
+      content: "Objective: A dedicated and detail-oriented software developer with [number] years of experience in designing, developing, and maintaining software applications. Seeking to leverage technical skills and strong problem-solving abilities to contribute effectively to [Company Name]’s development team.\n\nEducation: BS in Computer Science; Oklhoma State University, Stillwater, OK\n\nTechnical Skills: Programming Languages: Python, Java, C++, C#; Web Development: HTML/CSS, JavaScript, React, Angular, etc.; Database Management: MySQL;Tools & Technologies: Git, SVN; IDEs Visual Studio Code, IntelliJ IDEA; Operating Systems: Windows, Linux\n\nProfessional Experience:\nSoftware Developer: Collaborated with cross-functional teams to deliver high-quality software solutions. Conducted code reviews and provided constructive feedback to team members. Participated in Agile sprint planning, stand-ups, and retrospectives. \nSoftware Engineering Intern: Assisted in the development and testing of a Unity Simulation. Learned and applied Scrum methodologies, Unity in C# and Visual Studio. Contributed to team discussions and brainstorming sessions.",
+      goalId: 1,
+      experienceId: [1],
+      skillId: [1, 2],
+      educationId: [1, 2],
+      linkId: [1],
+      template: 4,
+      editing: false,
+      comments: "",
+      rating: "",
+      userId: 3
+    }
   });
 }
