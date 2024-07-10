@@ -9,9 +9,14 @@ const db = require("./app/models");
 
 const addValues = require("./addValues");
 db.sequelize.sync().then(()=>{
-   addValues.create();
+    addValues.create();
 });
 
+if (process.env.TESTING == 'true') {
+  db.sequelize.sync().then(()=>{
+    addValues.testCreate();
+  });
+}
 
 var corsOptions = {
   origin: "http://localhost:8081",
