@@ -12,87 +12,86 @@ const { encrypt, getSalt, hashPassword } = require("./app/authentication/crypto"
 
 //default values
 //create when first construct table and ensure items did not exist before create
-module.exports ={ create: async function(){
-    //default roles
-    Role.findOrCreate({
-      where : {id : 1},
-      defaults: {
-        title : "Administrator"
-      }
-    });
-    //default roles
-    Role.findOrCreate({
-      where : {id : 2},
-      defaults: {
-        title : "Career Service"
-      }
-    });
-    //default roles
-    Role.findOrCreate({
-      where : {id : 3},
-      defaults: {
-        title : "Student"
-      }
-    });
+exports.create = async () => {
+  //default roles
+  Role.findOrCreate({
+    where : {id : 1},
+    defaults: {
+      title : "Administrator"
+    }
+  });
+  //default roles
+  Role.findOrCreate({
+    where : {id : 2},
+    defaults: {
+      title : "Career Service"
+    }
+  });
+  //default roles
+  Role.findOrCreate({
+    where : {id : 3},
+    defaults: {
+      title : "Student"
+    }
+  });
 
-    //default Experience Type
-    ExperienceType.findOrCreate({
-      where : {id : 1},
-      defaults: {
-        title : "Work Experience"
-      }
-    });
-    //default Experience Type
-    ExperienceType.findOrCreate({
-      where : {id : 2},
-      defaults: {
-        title : "Internship Experience"
-      }
-    });
-    //default Experience Type
-    ExperienceType.findOrCreate({
-      where : {id : 3},
-      defaults: {
-        title : "Project Experience"
-      }
-    });
-    //default Experience Type
-    ExperienceType.findOrCreate({
-      where : {id : 4},
-      defaults: {
-        title : "Leadership Experience"
-      }
-    });
-    //default Experience Type
-    ExperienceType.findOrCreate({
-      where : {id : 5},
-      defaults: {
-        title : "Honor Experience"
-      }
-    });
+  //default Experience Type
+  ExperienceType.findOrCreate({
+    where : {id : 1},
+    defaults: {
+      title : "Work Experience"
+    }
+  });
+  //default Experience Type
+  ExperienceType.findOrCreate({
+    where : {id : 2},
+    defaults: {
+      title : "Internship Experience"
+    }
+  });
+  //default Experience Type
+  ExperienceType.findOrCreate({
+    where : {id : 3},
+    defaults: {
+      title : "Project Experience"
+    }
+  });
+  //default Experience Type
+  ExperienceType.findOrCreate({
+    where : {id : 4},
+    defaults: {
+      title : "Leadership Experience"
+    }
+  });
+  //default Experience Type
+  ExperienceType.findOrCreate({
+    where : {id : 5},
+    defaults: {
+      title : "Honor Experience"
+    }
+  });
 
-      //admin user
-    let salt = await getSalt();
-    let hash = await hashPassword("password", salt);
-    User.findOrCreate({
-      where: { id: 1 },
-      defaults: {
-        userName: 'Admin',
-        email: "Admin@email.com",
-        firstName: "Admin",
-        lastName : "user",
-        address: "In this web",
-        phoneNumber: "555-555-555",
-        roleId : 1,
-        darkMode: false,
-        password: hash,
-        salt: salt
-      },
-    });
-  }//end function
-}//end export
+    //admin user
+  let salt = await getSalt();
+  let hash = await hashPassword("password", salt);
+  User.findOrCreate({
+    where: { id: 1 },
+    defaults: {
+      userName: 'Admin',
+      email: "Admin@email.com",
+      firstName: "Admin",
+      lastName : "user",
+      address: "In this web",
+      phoneNumber: "555-555-555",
+      roleId : 1,
+      darkMode: false,
+      password: hash,
+      salt: salt
+    },
+  });
+}//end function
 
-module.exports = { testCreate: async function() {
+exports.testCreate = async () => {
   let salt = await getSalt();
   let hash = await hashPassword("password", salt);
   // Career Services user
@@ -207,7 +206,8 @@ module.exports = { testCreate: async function() {
     defaults: {
       title: "Main Professional Summary",
       description: "\"A dedicated Software Engineer with a passion for innovation and a commitment to driving technical success. Demonstrated expertise in software development and a strong foundation in programming languages. As a former intern at Tinker AFB, I actively contributed to the Software Group, showcasing my ability to collaborate in a professional environment. I have also excelled in academic pursuits, graduating magna cum laude and serving as club president during my college years, reflecting my leadership skills and dedication to excellence. Eager to join a dynamic team where I can leverage my technical knowledge and problem-solving abilities to contribute to impactful software solutions.\"",
-      userId: 3
+      userId: 3,
+      chatHistory: []
     },
   });
 
@@ -249,4 +249,4 @@ module.exports = { testCreate: async function() {
       userId: 3
     },
   });
-}}
+}

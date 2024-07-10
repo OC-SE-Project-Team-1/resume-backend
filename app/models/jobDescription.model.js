@@ -7,14 +7,6 @@ module.exports = (sequelize, Sequelize) => {
       description: {
         type: Sequelize.TEXT,
         allowNull: false,
-      },
-      startDate: {
-        type: Sequelize.DATEONLY,
-        allowNull: false,
-      },
-      endDate: {
-        type: Sequelize.DATEONLY,
-        allowNull: true,
       }
     });
     return jobDescription;
