@@ -195,7 +195,7 @@ exports.delete = (req, res) => {
 
 //========== Cohere Functions ==========//
 function GenerateCohereRequest(settings) {
-    let request = `Write me a short skill description or expand upon this skill description: ` + settings 
+    let request = `Write me a short skill description from this: ` + settings 
 
     request = `${request}. \n\nJump straight into the skill description.`;
 
