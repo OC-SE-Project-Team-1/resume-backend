@@ -21,5 +21,5 @@ module.exports = (app) => {
     // Delete a experience with Id
     router.delete("/experience/:id", [authenticateRoute, authenticateAdmin], experience.delete);
   
-    app.use("/resume", router);
+    app.use("/resume-p2t1", router);
   };

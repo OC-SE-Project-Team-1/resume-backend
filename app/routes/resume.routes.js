@@ -21,5 +21,5 @@ module.exports = (app) => {
     // Delete a resume with Id
     router.delete("/resumes/:id", [authenticateRoute, authenticateUserReq], resume.delete);
   
-    app.use("/resume", router);
+    app.use("/resume-p2t1", router);
   };

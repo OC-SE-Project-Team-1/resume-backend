@@ -21,5 +21,5 @@ module.exports = (app) => {
     // Delete a link with Id
     router.delete("/link/:id", link.delete);
   
-    app.use("/resume", router);
+    app.use("/resume-p2t1", router);
   };
