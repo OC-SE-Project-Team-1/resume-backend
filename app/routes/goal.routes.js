@@ -1,25 +1,25 @@
 module.exports = (app) => {
     const goal = require("../controllers/goal.controller.js");
     var router = require("express").Router();
-    const { authenticateRoute } = require("../authentication/authentication.js");
+    const { authenticateRoute, authenticateUserReq, authenticateAdmin } = require("../authentication/authentication.js");
   
     // Create a new goal
-    router.post("/goal/", goal.create);
+    router.post("/goal/", [authenticateRoute, authenticateUserReq], goal.create);
   
     // Retrieve all goals
-    router.get("/goal/", goal.findAll);
+    router.get("/goal/",[authenticateRoute, authenticateAdmin], goal.findAll);
 
     // Retrieve all goals for a user
-    router.get("/goal/user/:userId", goal.findAllForUser);
+    router.get("/goal/user/:userId",[authenticateRoute, authenticateUserReq], goal.findAllForUser);
   
     // Retrieve a single goal with Id
-    router.get("/goal/:id", goal.findOne);
+    router.get("/goal/:id", [authenticateRoute, authenticateUserReq], goal.findOne);
   
     // Update a goal with Id
-    router.put("/goal/:id", goal.update);
+    router.put("/goal/:id", [authenticateRoute, authenticateUserReq], goal.update);
   
     // Delete a goal with Id
-    router.delete("/goal/:id", goal.delete);
+    router.delete("/goal/:id", [authenticateRoute, authenticateUserReq], goal.delete);
   
     app.use("/resume-p2t1", router);
   };

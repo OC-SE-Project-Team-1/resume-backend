@@ -1,25 +1,25 @@
 module.exports = (app) => {
     const skill = require("../controllers/skill.controller.js");
     var router = require("express").Router();
-    const { authenticateRoute } = require("../authentication/authentication.js");
+    const { authenticateRoute, authenticateUserReq, authenticateAdmin } = require("../authentication/authentication.js");
   
     // Create a new skill
-    router.post("/skill/", skill.create);
+    router.post("/skill/",[authenticateRoute, authenticateUserReq], skill.create);
   
     // Retrieve all skills
-    router.get("/skill/", skill.findAll);
+    router.get("/skill/",[authenticateRoute, authenticateAdmin], skill.findAll);
 
     // Retrieve all skills for a user
-    router.get("/skill/user/:userId", skill.findAllForUser);
+    router.get("/skill/user/:userId",[authenticateRoute, authenticateUserReq], skill.findAllForUser);
   
     // Retrieve a single skill with Id
-    router.get("/skill/:id", skill.findOne);
+    router.get("/skill/:id",[authenticateRoute, authenticateUserReq], skill.findOne);
   
     // Update a skill with Id
-    router.put("/skill/:id", skill.update);
+    router.put("/skill/:id",[authenticateRoute, authenticateUserReq], skill.update);
   
     // Delete a skill with Id
-    router.delete("/skill/:id", skill.delete);
+    router.delete("/skill/:id",[authenticateRoute, authenticateUserReq], skill.delete);
   
     app.use("/resume-p2t1", router);
   };
