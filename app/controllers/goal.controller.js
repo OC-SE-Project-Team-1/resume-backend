@@ -35,10 +35,6 @@ exports.create = async (req, res) => {
         const error = new Error("User ID cannot be empty for Goal");
         error.statusCode = 400;
         throw error;
-    } else if (req.body.history === undefined) {
-        const error = new Error("History cannot be empty for Goal");
-        error.statusCode = 400;
-        throw error;
     }
 
     // Create goal
@@ -46,7 +42,7 @@ exports.create = async (req, res) => {
         title: req.body.title,
         description: req.body.description,
         userId: req.body.userId,
-        chatHistory: req.body.history
+        chatHistory: (req.body.chatHistory != null) ? req.body.chatHistory : [],
     };
 
     const isDuplicateGoal = await findDuplicateGoal(req.body.title, req.body.userId, 0);
@@ -223,7 +219,7 @@ exports.generateAIDescription = async (req, res) => {
     let request = "";
     let history = [];
 
-    if (req.body.history === undefined) {
+    if (req.body.chatHistory === undefined) {
         if (req.body.title === undefined) {
             const error = new Error("Title cannot be empty");
             error.statusCode = 400;
@@ -239,7 +235,7 @@ exports.generateAIDescription = async (req, res) => {
         }
         request = GenerateCohereRequest(req.body);
     } else {
-        history = req.body.history;
+        history = req.body.chatHistory;
         request = "Give me an alternative professional summary";
     }
     response = await cohere.SendCohereRequest(request, history);

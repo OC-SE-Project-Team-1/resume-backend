@@ -3,9 +3,9 @@ const Exp = db.experience;
 const Op = db.Sequelize.Op;
 const cohere = require("./cohereRequest");
 
-async function findDuplicateExp(entry, userId, id){
+async function findDuplicateExp(entry, organization, userId, id){
     try{
-      const existingExp = await Exp.findOne({where: {title: entry, userId: userId, [Op.not]: [{id: id}]}});
+      const existingExp = await Exp.findOne({where: {title: entry, organization : organization, userId: userId, [Op.not]: [{id: id}]}});
   
       if (existingExp){
         console.error('There is an imposter experience among us');
@@ -43,23 +43,20 @@ exports.create = async (req, res) => {
         const error = new Error("experience Type Id cannot be empty for Experience");
         error.statusCode = 400;
         throw error;
-    }   else if (req.body.city === undefined) {
-        const error = new Error("City cannot be empty for Experience");
-        error.statusCode = 400;
-        throw error;
-    }   else if (req.body.state === undefined) {
-        const error = new Error("State cannot be empty for Experience");
-        error.statusCode = 400;
-        throw error;
-    }   else if (req.body.organization === undefined) {
+    } else if (req.body.organization === undefined) {
         const error = new Error("Organization cannot be empty for Experience");
         error.statusCode = 400;
         throw error;
+<<<<<<< HEAD
     } else if (req.body.history === undefined) {
         const error = new Error("History cannot be empty for Goal");
         error.statusCode = 400;
         throw error;
     }
+=======
+    } 
+
+>>>>>>> 582aa4b (Many education table changes)
     // Create Experience
     const exp = {
         title: req.body.title,
@@ -71,26 +68,19 @@ exports.create = async (req, res) => {
         city: req.body.city,
         state: req.body.state,
         organization: req.body.organization,
-        chatHistory: req.body.history
+        chatHistory: (req.body.chatHistory != null) ? req.body.chatHistory : [],
+        current : (req.body.current != null) ? req.body.current : false
     };
 
-    const isDuplicateExp = await findDuplicateExp(req.body.title, req.body.userId, 0);
+    // Save Experience
+    Exp.create(exp).then((data) => {
+        res.send(data);
+    }).catch((err) => {
+        res.status(500).send({
+            message: err.message || "An error occured while saving the Experience.",
+        });
+    });
 
-    if (isDuplicateExp) {
-        return res.status(500).send({
-          message:
-            "This Experience is already created",
-        });
-    } else {
-        // Save Experience
-        Exp.create(exp).then((data) => {
-            res.send(data);
-        }).catch((err) => {
-            res.status(500).send({
-                message: err.message || "An error occured while saving the Experience.",
-            });
-        });
-    }
 };
 
 // Find all Experiences in the database
@@ -154,32 +144,24 @@ exports.findOne = (req, res) => {
 exports.update = async (req, res) => {
     const id = req.params.id;
 
-    const isDuplicateExp = req.body.title != null ? await findDuplicateExp(req.body.title, req.body.userId, id) : null;
-
-    if (isDuplicateExp) {
-        return res.status(500).send({
-        message:
-            "This Experience is already in use",
-        });
-    } else {
-        Exp.update(req.body, {
-            where: { id: id},
-        }).then((number) => {
-            if (number == 1) {
-                res.send({
-                    message: "Experience was updated successfully.",
-                });
-            } else {
-                res.send({
-                    message: `Cannot update Experience with id=${id}. Maybe Experience was not found!`,
-                });
-            }
-        }).catch((err) => {
-            res.status(500).send({
-                message: err.message || "Error updating Experience with id=" + id,
+    Exp.update(req.body, {
+        where: { id: id},
+    }).then((number) => {
+        if (number == 1) {
+            res.send({
+                message: "Experience was updated successfully.",
             });
+        } else {
+            res.send({
+                message: `Cannot update Experience with id=${id}. Maybe Experience was not found!`,
+            });
+        }
+    }).catch((err) => {
+        res.status(500).send({
+            message: err.message || "Error updating Experience with id=" + id,
         });
-    }
+    });
+
 };
 
 // Delete a Experience with the specified id in the request
@@ -221,7 +203,7 @@ exports.generateAIDescription = async (req, res) => {
     let request = "";
     let history = [];
 
-    if (req.body.history === undefined) {
+    if (req.body.chatHistory === undefined) {
         if (req.body.title === undefined) {
             const error = new Error("Title cannot be empty");
             error.statusCode = 400;
@@ -233,7 +215,7 @@ exports.generateAIDescription = async (req, res) => {
         } 
         request = GenerateCohereRequest(req.body);
     } else {
-        history = req.body.history;
+        history = req.body.chatHistory;
         request = "Give me an alternative professional section of my experience for my resume";
     }
     response = await cohere.SendCohereRequest(request, history);
