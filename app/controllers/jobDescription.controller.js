@@ -36,24 +36,12 @@ exports.create = async (req, res) => {
         error.statusCode = 400;
         throw error;
     }
-    else if (req.body.startDate === undefined) {
-        const error = new Error("Start Date cannot be empty for JobDescription");
-        error.statusCode = 400;
-        throw error;
-    }
-    else if (req.body.endDate === undefined) {
-        const error = new Error("End Date cannot be empty for JobDescription");
-        error.statusCode = 400;
-        throw error;
-    }
 
     // Create jobDescription
     const jobDescription = {
         title: req.body.title,
         description: req.body.description,
-        userId: req.body.userId,
-        startDate: req.body.startDate,
-        endDate: req.body.endDate
+        userId: req.body.userId
     };
 
     const isDuplicateJobDescription = await findDuplicateJobDescription(req.body.title, req.body.userId, 0);
