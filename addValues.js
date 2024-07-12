@@ -48,7 +48,7 @@ ExperienceType.findOrCreate({
 ExperienceType.findOrCreate({
   where : {id : 3},
   defaults: {
-    title : "Project Experience"
+    title : "Activities"
   }
 });
 //default Experience Type
@@ -62,7 +62,7 @@ ExperienceType.findOrCreate({
 ExperienceType.findOrCreate({
   where : {id : 5},
   defaults: {
-    title : "Honor Experience"
+    title : "Projects"
   }
 });
 
