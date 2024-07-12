@@ -69,23 +69,15 @@ exports.create = async (req, res) => {
         current : (req.body.current != null) ? req.body.current : false
     };
 
-    const isDuplicateExp = await findDuplicateExp(req.body.title, req.body.organization, req.body.userId, 0);
+    // Save Experience
+    Exp.create(exp).then((data) => {
+        res.send(data);
+    }).catch((err) => {
+        res.status(500).send({
+            message: err.message || "An error occured while saving the Experience.",
+        });
+    });
 
-    if (isDuplicateExp) {
-        return res.status(500).send({
-          message:
-            "This Experience is already created",
-        });
-    } else {
-        // Save Experience
-        Exp.create(exp).then((data) => {
-            res.send(data);
-        }).catch((err) => {
-            res.status(500).send({
-                message: err.message || "An error occured while saving the Experience.",
-            });
-        });
-    }
 };
 
 // Find all Experiences in the database
@@ -149,32 +141,24 @@ exports.findOne = (req, res) => {
 exports.update = async (req, res) => {
     const id = req.params.id;
 
-    const isDuplicateExp = req.body.title != null ? await findDuplicateExp(req.body.title, req.body.organization, req.body.userId, id) : null;
-
-    if (isDuplicateExp) {
-        return res.status(500).send({
-        message:
-            "This Experience is already in use",
-        });
-    } else {
-        Exp.update(req.body, {
-            where: { id: id},
-        }).then((number) => {
-            if (number == 1) {
-                res.send({
-                    message: "Experience was updated successfully.",
-                });
-            } else {
-                res.send({
-                    message: `Cannot update Experience with id=${id}. Maybe Experience was not found!`,
-                });
-            }
-        }).catch((err) => {
-            res.status(500).send({
-                message: err.message || "Error updating Experience with id=" + id,
+    Exp.update(req.body, {
+        where: { id: id},
+    }).then((number) => {
+        if (number == 1) {
+            res.send({
+                message: "Experience was updated successfully.",
             });
+        } else {
+            res.send({
+                message: `Cannot update Experience with id=${id}. Maybe Experience was not found!`,
+            });
+        }
+    }).catch((err) => {
+        res.status(500).send({
+            message: err.message || "Error updating Experience with id=" + id,
         });
-    }
+    });
+
 };
 
 // Delete a Experience with the specified id in the request
