@@ -120,8 +120,7 @@ exports.findAll = (req, res) => {
     } : null;
 
     Education.findAll({
-        where: condition, 
-        order: ["title"]
+        where: condition,
     }).then((data) => {
         res.send(data);
     }).catch((err) => {
@@ -136,9 +135,6 @@ exports.findAllForUser = (req, res) => {
     const userId = req.params.userId;
     Education.findAll({
       where: { [Op.or]: [{ userId: userId }, { userId: null }]},
-      order: [
-        ["title"], 
-      ],
     }).then((data) => {
         if (data) {
             res.send(data);
