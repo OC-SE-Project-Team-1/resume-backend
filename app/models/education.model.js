@@ -34,7 +34,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       courses: {
         type: Sequelize.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
       minor: {
         type: Sequelize.TEXT,

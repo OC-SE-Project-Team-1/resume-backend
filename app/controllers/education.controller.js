@@ -176,7 +176,7 @@ exports.update = async (req, res) => {
     }
 
     const id = req.params.id;
-    const isDuplicateEducation = (req.body.title) ? await findDuplicateEducation(req.body.title, req.body.userId, id) : null;
+    const isDuplicateEducation = (req.body.title) ? await findDuplicateEducation(req.body.organization, req.body.description, req.body.userId, id) : null;
 
     if (isDuplicateEducation) {
         return res.status(500).send({
