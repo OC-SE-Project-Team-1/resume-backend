@@ -16,6 +16,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.DATEONLY,
         allowNull: true,
       },
+      current: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+      },
       city: {
         type: Sequelize.STRING(50),
         allowNull: true,

@@ -2,9 +2,9 @@ const db = require("../models");
 const Exp = db.experience;
 const Op = db.Sequelize.Op;
 
-async function findDuplicateExp(entry, userId, id){
+async function findDuplicateExp(entry, organization, userId, id){
     try{
-      const existingExp = await Exp.findOne({where: {title: entry, userId: userId, [Op.not]: [{id: id}]}});
+      const existingExp = await Exp.findOne({where: {title: entry, organization : organization, userId: userId, [Op.not]: [{id: id}]}});
   
       if (existingExp){
         console.error('There is an imposter experience among us');
@@ -65,10 +65,11 @@ exports.create = async (req, res) => {
         experienceTypeId : req.body.experienceTypeId,
         city: req.body.city,
         state: req.body.state,
-        organization: req.body.organization
+        organization: req.body.organization,
+        current : (req.body.current != null) ? req.body.current : false
     };
 
-    const isDuplicateExp = await findDuplicateExp(req.body.title, req.body.userId, 0);
+    const isDuplicateExp = await findDuplicateExp(req.body.title, req.body.organization, req.body.userId, 0);
 
     if (isDuplicateExp) {
         return res.status(500).send({
@@ -148,7 +149,7 @@ exports.findOne = (req, res) => {
 exports.update = async (req, res) => {
     const id = req.params.id;
 
-    const isDuplicateExp = req.body.title != null ? await findDuplicateExp(req.body.title, req.body.userId, id) : null;
+    const isDuplicateExp = req.body.title != null ? await findDuplicateExp(req.body.title, req.body.organization, req.body.userId, id) : null;
 
     if (isDuplicateExp) {
         return res.status(500).send({
