@@ -228,7 +228,7 @@ exports.testCreate = async () => {
   });
   //Vounteer
   Experience.findOrCreate({
-    where: { id: 3 },
+    where: { id: 4 },
     defaults: {
       title: "Animal shelter volunteer",
       description: "Help taking care of animals at local animal Sheter",
@@ -244,7 +244,7 @@ exports.testCreate = async () => {
   });
   //Honor
   Experience.findOrCreate({
-    where: { id: 3 },
+    where: { id: 5 },
     defaults: {
       title: "President Honor Roll",
       description: "Listed in president honor roll for 4 years",
@@ -260,7 +260,7 @@ exports.testCreate = async () => {
   });
      //Awards
   Experience.findOrCreate({
-    where: { id: 3 },
+    where: { id: 6 },
     defaults: {
       title: "Karaoke champion",
       description: "Current Karaoke champion at Local neighborhood",
