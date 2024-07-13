@@ -5,7 +5,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
       },
       content: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       comments: {
@@ -20,6 +20,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
+      template: {
+        type: Sequelize.INTEGER(1),
+        allowNull: false
+      }
     });
     return resume;
   };
