@@ -36,41 +36,41 @@ exports.create = async () => {
     }
   });
 
-  //default Experience Type
-  ExperienceType.findOrCreate({
-    where : {id : 1},
-    defaults: {
-      title : "Work Experience"
-    }
-  });
-  //default Experience Type
-  ExperienceType.findOrCreate({
-    where : {id : 2},
-    defaults: {
-      title : "Internship Experience"
-    }
-  });
-  //default Experience Type
-  ExperienceType.findOrCreate({
-    where : {id : 3},
-    defaults: {
-      title : "Project Experience"
-    }
-  });
-  //default Experience Type
-  ExperienceType.findOrCreate({
-    where : {id : 4},
-    defaults: {
-      title : "Leadership Experience"
-    }
-  });
-  //default Experience Type
-  ExperienceType.findOrCreate({
-    where : {id : 5},
-    defaults: {
-      title : "Honor Experience"
-    }
-  });
+//default Experience Type
+ExperienceType.findOrCreate({
+  where : {id : 1},
+  defaults: {
+    title : "Work Experience"
+  }
+});
+//default Experience Type
+ExperienceType.findOrCreate({
+  where : {id : 2},
+  defaults: {
+    title : "Internship Experience"
+  }
+});
+//default Experience Type
+ExperienceType.findOrCreate({
+  where : {id : 3},
+  defaults: {
+    title : "Activities"
+  }
+});
+//default Experience Type
+ExperienceType.findOrCreate({
+  where : {id : 4},
+  defaults: {
+    title : "Leadership Experience"
+  }
+});
+//default Experience Type
+ExperienceType.findOrCreate({
+  where : {id : 5},
+  defaults: {
+    title : "Projects"
+  }
+});
 
     //admin user
   let salt = await getSalt();
@@ -91,6 +91,7 @@ exports.create = async () => {
     },
   });
 }//end function
+
 
 exports.testCreate = async () => {
   let salt = await getSalt();
