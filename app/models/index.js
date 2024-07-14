@@ -198,19 +198,6 @@ db.education.belongsToMany(
   through : "Resume_Education"
   }
 );
-//Resume Relationship with Education
-db.resume.belongsToMany(
-  db.jobDescription,
- { as: "JobDescription" ,
-  through : "Resume_JobDescription"
-  }
-);
-db.jobDescription.belongsToMany(
-  db.resume,
-  { as: "Resume",
-  through : "Resume_JobDescription"
-  }
-);
 //Resume Relationship with Link
 db.resume.belongsToMany(
   db.link,
