@@ -14,6 +14,9 @@ module.exports = (app) => {
   
     // Retrieve a single experience with Id
     router.get("/experience/:id", [authenticateRoute, authenticateUserReq], experience.findOne);
+
+    // AI Assist for experience
+    router.post("/experience/assist", experience.generateAIDescription);
   
     // Update a experience with Id
     router.put("/experience/:id", [authenticateRoute, authenticateUserReq], experience.update);

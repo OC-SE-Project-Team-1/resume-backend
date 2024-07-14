@@ -1,6 +1,7 @@
 const db = require("../models");
 const Exp = db.experience;
 const Op = db.Sequelize.Op;
+const cohere = require("./cohereRequest");
 
 async function findDuplicateExp(entry, organization, userId, id){
     try{
@@ -54,6 +55,10 @@ exports.create = async (req, res) => {
         const error = new Error("Organization cannot be empty for Experience");
         error.statusCode = 400;
         throw error;
+    } else if (req.body.history === undefined) {
+        const error = new Error("History cannot be empty for Goal");
+        error.statusCode = 400;
+        throw error;
     }
     // Create Experience
     const exp = {
@@ -66,6 +71,7 @@ exports.create = async (req, res) => {
         city: req.body.city,
         state: req.body.state,
         organization: req.body.organization,
+        chatHistory: (req.body.history!= null) ? req.body.history : [],
         current : (req.body.current != null) ? req.body.current : false
     };
 
@@ -182,4 +188,42 @@ exports.delete = (req, res) => {
                 message: err.message || "Could not delete Experience with id=" + id,
             });
         });
+};
+
+//========== Cohere Functions ==========//
+function GenerateCohereRequest(settings) {
+    let request = `Write me a professional section of my experiences that I could use in a resume. My experience is:`;
+
+    request = `${request} ${settings.experience}`;
+    
+    request = `${request}. \n\nJump straight into the professional section of my experience.`;
+
+    return request;
+}
+
+exports.generateAIDescription = async (req, res) => {
+    let response = "";
+    let request = "";
+    let history = [];
+
+    if (req.body.history === undefined) {
+        if (req.body.title === undefined) {
+            const error = new Error("Title cannot be empty");
+            error.statusCode = 400;
+            throw error;
+        } else if (req.body.experience === undefined) {
+            const error = new Error("Experiences cannot be empty");
+            error.statusCode = 400;
+            throw error;
+        } 
+        request = GenerateCohereRequest(req.body);
+    } else {
+        history = req.body.history;
+        request = "Give me an alternative professional section of my experience for my resume";
+    }
+    response = await cohere.SendCohereRequest(request, history);
+
+    let profSection = cohere.SaveAIAssist(history, request, response);
+
+    res.send(profSection);
 };

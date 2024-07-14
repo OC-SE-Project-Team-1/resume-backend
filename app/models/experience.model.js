@@ -32,6 +32,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING(50),
         allowNull: true,
       },
+      chatHistory: {
+        type: Sequelize.JSON,
+        allowNull: false,
+      }
     });
     return experience;
   };

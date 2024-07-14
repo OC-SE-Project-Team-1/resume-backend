@@ -99,6 +99,7 @@ exports.create = async () => {
   });
 }//end function
 
+
 exports.testCreate = async () => {
   let salt = await getSalt();
   let hash = await hashPassword("password", salt);
