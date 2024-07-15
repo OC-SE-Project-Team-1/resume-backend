@@ -2,6 +2,7 @@ const db = require("../models");
 const Skill = db.skill;
 const User = db.user;
 const Op = db.Sequelize.Op;
+const cohere = require("./cohereRequest");
 
 async function findDuplicateSkill(entry, userId, id){
     try{
@@ -41,7 +42,8 @@ exports.create = async (req, res) => {
     const skill = {
         title: req.body.title,
         description: req.body.description,
-        userId: req.body.userId
+        userId: req.body.userId,
+        history : (req.body.history != null) ? req.body.history : [],
     };
 
     const isDuplicateSkill = await findDuplicateSkill(req.body.title, req.body.userId, 0);
@@ -189,4 +191,32 @@ exports.delete = (req, res) => {
             });
         });
     }
+};
+
+//========== Cohere Functions ==========//
+function GenerateCohereRequest(settings) {
+    let request = `Write me a short skill description from this: ` + settings 
+
+    request = `${request}. \n\nJump straight into the skill description.`;
+
+    return request;
+}
+
+exports.generateAIDescription = async (req, res) => {
+    let response = "";
+    let request = "";
+    let history = [];
+
+    if (req.body.history === undefined) {
+       
+        request = GenerateCohereRequest(req.body.description);
+    } else {
+        history = req.body.history;
+        request = "Give me an alternative skill summary";
+    }
+    response = await cohere.SendCohereRequest(request, history);
+
+    let skillSummary = cohere.SaveAIAssist(history, request, response);
+
+    res.send(skillSummary);
 };
