@@ -192,6 +192,7 @@ exports.testCreate = async () => {
       city: "Midwest City",
       state: "OK",
       current : true,
+      chatHistory: [],
       experienceTypeId: 1
     },
   });
@@ -208,6 +209,7 @@ exports.testCreate = async () => {
       city: "Oklahoma City",
       state: "OK",
       current : false,
+      chatHistory: [],
       experienceTypeId: 2
     },
   });
@@ -224,6 +226,7 @@ exports.testCreate = async () => {
       city: "Oklahoma City",
       state: "OK",
       current : true,
+      chatHistory: [],
       experienceTypeId: 3
     },
   });
@@ -240,6 +243,7 @@ exports.testCreate = async () => {
       city: "Oklahoma City",
       state: "OK",
       current : true,
+      chatHistory: [],
       experienceTypeId: 4
     },
   });
@@ -256,6 +260,7 @@ exports.testCreate = async () => {
       city: "Oklahoma City",
       state: "OK",
       current : false,
+      chatHistory: [],
       experienceTypeId: 5
     },
   });
@@ -272,6 +277,7 @@ exports.testCreate = async () => {
       city: "Oklahoma City",
       state: "OK",
       current : true,
+      chatHistory: [],
       experienceTypeId: 6
     },
   });

@@ -71,7 +71,7 @@ exports.create = async (req, res) => {
         city: req.body.city,
         state: req.body.state,
         organization: req.body.organization,
-        chatHistory: (req.body.history!= null) ? req.body.history : [],
+        chatHistory: (req.body.history != null) ? req.body.history : [],
         current : (req.body.current != null) ? req.body.current : false
     };
 
