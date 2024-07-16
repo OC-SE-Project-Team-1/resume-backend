@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       chatHistory: {
         type: Sequelize.JSON,
-        allowNull: false,
+        allowNull: true,
       }
     });
     return goal;

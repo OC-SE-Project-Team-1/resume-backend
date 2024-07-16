@@ -55,11 +55,8 @@ exports.create = async (req, res) => {
         const error = new Error("Organization cannot be empty for Experience");
         error.statusCode = 400;
         throw error;
-    } else if (req.body.history === undefined) {
-        const error = new Error("History cannot be empty for Goal");
-        error.statusCode = 400;
-        throw error;
-    }
+    } 
+    
     // Create Experience
     const exp = {
         title: req.body.title,
@@ -71,7 +68,7 @@ exports.create = async (req, res) => {
         city: req.body.city,
         state: req.body.state,
         organization: req.body.organization,
-        chatHistory: (req.body.history != null) ? req.body.history : [],
+        chatHistory: (req.body.chatHistory != null) ? req.body.chatHistory : [],
         current : (req.body.current != null) ? req.body.current : false
     };
 
@@ -206,7 +203,7 @@ exports.generateAIDescription = async (req, res) => {
     let request = "";
     let history = [];
 
-    if (req.body.history === undefined) {
+    if (req.body.chatHistory === undefined) {
         if (req.body.title === undefined) {
             const error = new Error("Title cannot be empty");
             error.statusCode = 400;
@@ -218,7 +215,7 @@ exports.generateAIDescription = async (req, res) => {
         } 
         request = GenerateCohereRequest(req.body);
     } else {
-        history = req.body.history;
+        history = req.body.chatHistory;
         request = "Give me an alternative professional section of my experience for my resume";
     }
     response = await cohere.SendCohereRequest(request, history);

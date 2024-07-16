@@ -43,7 +43,7 @@ exports.create = async (req, res) => {
         title: req.body.title,
         description: req.body.description,
         userId: req.body.userId,
-        history : (req.body.history != null) ? req.body.history : [],
+        chatHistory : (req.body.chatHistory != null) ? req.body.chatHistory : [],
     };
 
     const isDuplicateSkill = await findDuplicateSkill(req.body.title, req.body.userId, 0);
@@ -207,11 +207,11 @@ exports.generateAIDescription = async (req, res) => {
     let request = "";
     let history = [];
 
-    if (req.body.history === undefined) {
+    if (req.body.chatHistory === undefined) {
        
         request = GenerateCohereRequest(req.body.description);
     } else {
-        history = req.body.history;
+        history = req.body.chatHistory;
         request = "Give me an alternative skill summary";
     }
     response = await cohere.SendCohereRequest(request, history);
