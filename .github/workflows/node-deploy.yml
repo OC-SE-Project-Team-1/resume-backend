@@ -26,12 +26,11 @@ jobs:
       - run: npm install
       
       - run: |
-          echo DB_HOST = ${{env.DB_HOST}} >> .env
+          echo DB_HOST = ${{env.DB_HOST}} > .env
           echo DB_PW = ${{env.DB_PW}} >> .env
           echo DB_USER = ${{env.DB_USER}} >> .env
           echo DB_NAME = ${{env.DB_NAME}} >> .env
-          echo CLIENT_ID = ${{env.CLIENT_ID}} >> .env
-          echo CLIENT_SECRET = ${{env.CLIENT_SECRET}} >> .env
+          echo SECRET_KEY = ${{env.SECRET_KEY}} >> .env
       - run: npm run winbundle
 
       - name: Deploy to Server
