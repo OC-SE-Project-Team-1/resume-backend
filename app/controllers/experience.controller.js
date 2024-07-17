@@ -47,16 +47,7 @@ exports.create = async (req, res) => {
         const error = new Error("Organization cannot be empty for Experience");
         error.statusCode = 400;
         throw error;
-<<<<<<< HEAD
-    } else if (req.body.history === undefined) {
-        const error = new Error("History cannot be empty for Goal");
-        error.statusCode = 400;
-        throw error;
-    }
-=======
     } 
-
->>>>>>> 582aa4b (Many education table changes)
     // Create Experience
     const exp = {
         title: req.body.title,
