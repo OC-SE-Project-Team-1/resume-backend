@@ -3,9 +3,9 @@ const Education = db.education;
 const User = db.user;
 const Op = db.Sequelize.Op;
 
-async function findDuplicateEducation(entry, userId, id){
+async function findDuplicateEducation(org, desc, userId, id){
     try{
-      const existingEducation = await Education.findOne({where: {title: entry, userId: userId, [Op.not]: [{id: id}]}});
+      const existingEducation = await Education.findOne({where: {organization: org, description: desc, userId: userId, [Op.not]: [{id: id}]}});
   
       if (existingEducation){
         console.error('There is an imposter education among us');
@@ -23,11 +23,7 @@ async function findDuplicateEducation(entry, userId, id){
 // Create and Save a new education
 exports.create = async (req, res) => {
     // Validate request
-    if (req.body.title === undefined) {
-        const error = new Error("Title cannot be empty for Education");
-        error.statusCode = 400;
-        throw error;
-    } else if (req.body.description === undefined) {
+    if (req.body.description === undefined) {
         const error = new Error("description cannot be empty for Education");
         error.statusCode = 400;
         throw error;
@@ -79,7 +75,6 @@ exports.create = async (req, res) => {
 
     // Create education
     const education = {
-        title: req.body.title,
         description: req.body.description,
         userId: req.body.userId,
         startDate: req.body.startDate,
@@ -94,7 +89,7 @@ exports.create = async (req, res) => {
         totalGPA: req.body.totalGPA
     };
 
-    const isDuplicateEducation = await findDuplicateEducation(req.body.title, req.body.userId, 0);
+    const isDuplicateEducation = await findDuplicateEducation(req.body.organization, req.body.description, req.body.userId, 0);
 
     if (isDuplicateEducation) {
         return res.status(500).send({
@@ -125,8 +120,7 @@ exports.findAll = (req, res) => {
     } : null;
 
     Education.findAll({
-        where: condition, 
-        order: ["title"]
+        where: condition,
     }).then((data) => {
         res.send(data);
     }).catch((err) => {
@@ -141,9 +135,6 @@ exports.findAllForUser = (req, res) => {
     const userId = req.params.userId;
     Education.findAll({
       where: { [Op.or]: [{ userId: userId }, { userId: null }]},
-      order: [
-        ["title"], 
-      ],
     }).then((data) => {
         if (data) {
             res.send(data);
@@ -181,7 +172,7 @@ exports.update = async (req, res) => {
     }
 
     const id = req.params.id;
-    const isDuplicateEducation = (req.body.title) ? await findDuplicateEducation(req.body.title, req.body.userId, id) : null;
+    const isDuplicateEducation = (req.body.title) ? await findDuplicateEducation(req.body.organization, req.body.description, req.body.userId, id) : null;
 
     if (isDuplicateEducation) {
         return res.status(500).send({

@@ -1,9 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
     const education = sequelize.define("education", {
-      title: {
-        type: Sequelize.STRING(50),
-        allowNull: false,
-      },
       description: {
         type: Sequelize.TEXT,
         allowNull: false,
@@ -25,11 +21,11 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
       },
       organization: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.STRING(255),
         allowNull: false,
       },
       city: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.STRING(100),
         allowNull: false,
       },
       state: {
@@ -38,11 +34,11 @@ module.exports = (sequelize, Sequelize) => {
       },
       courses: {
         type: Sequelize.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
       minor: {
         type: Sequelize.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
       totalGPA: {
         type: Sequelize.DECIMAL(3,2),
