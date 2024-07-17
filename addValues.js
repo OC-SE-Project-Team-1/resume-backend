@@ -54,6 +54,7 @@ exports.create = async () => {
   ExperienceType.findOrCreate({
     where : {id : 3},
     defaults: {
+
       title : "Activities Experience"
     }
   });
@@ -61,7 +62,7 @@ exports.create = async () => {
   ExperienceType.findOrCreate({
     where : {id : 4},
     defaults: {
-      title : "volunteer Experience"
+      title : "Volunteer Experience"
     }
   });
   //default Experience Type
