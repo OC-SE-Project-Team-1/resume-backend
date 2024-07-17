@@ -9,7 +9,7 @@ on:
 
 jobs:
   aws-deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env:
       DB_HOST: ${{ secrets.AWS_DB_HOST }}
       DB_PW: ${{ secrets.AWS_DB_PW}}
@@ -26,14 +26,13 @@ jobs:
       - run: npm install
       
       - run: |
-          touch .env
-          echo DB_HOST = "$DB_HOST" >> .env
-          echo DB_PW = "$DB_PW" >> .env
-          echo DB_USER = "$DB_USER" >> .env
-          echo DB_NAME = "$DB_NAME" >> .env
-          echo SECRET_KEY = "$SECRET_KEY" >> .env
-
-      - run: npm run bundle
+          echo DB_HOST = ${{env.DB_HOST}} >> .env
+          echo DB_PW = ${{env.DB_PW}} >> .env
+          echo DB_USER = ${{env.DB_USER}} >> .env
+          echo DB_NAME = ${{env.DB_NAME}} >> .env
+          echo CLIENT_ID = ${{env.CLIENT_ID}} >> .env
+          echo CLIENT_SECRET = ${{env.CLIENT_SECRET}} >> .env
+      - run: npm run winbundle
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.1.1
