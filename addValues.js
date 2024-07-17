@@ -47,30 +47,38 @@ exports.create = async () => {
   ExperienceType.findOrCreate({
     where : {id : 2},
     defaults: {
-      title : "Internship Experience"
+      title : "Leadership Experience"
     }
   });
   //default Experience Type
   ExperienceType.findOrCreate({
     where : {id : 3},
     defaults: {
-      title : "Activities"
+
+      title : "Activities Experience"
     }
   });
   //default Experience Type
   ExperienceType.findOrCreate({
     where : {id : 4},
     defaults: {
-      title : "Leadership Experience"
+      title : "Volunteer Experience"
     }
   });
   //default Experience Type
   ExperienceType.findOrCreate({
     where : {id : 5},
     defaults: {
-      title : "Projects"
+      title : "Honor Experience"
     }
   });
+    //default Experience Type
+    ExperienceType.findOrCreate({
+      where : {id : 6},
+      defaults: {
+        title : "Award Experience"
+      }
+    });
 
     //admin user
   let salt = await getSalt();
@@ -171,7 +179,8 @@ exports.testCreate = async () => {
     },
   });
 
-  // Experience
+  // Experiences
+  //work
   Experience.findOrCreate({
     where: { id: 1 },
     defaults: {
@@ -183,24 +192,97 @@ exports.testCreate = async () => {
       organization: "Tinker AFB",
       city: "Midwest City",
       state: "OK",
+      current : true,
+      chatHistory: [],
       experienceTypeId: 1
     },
   });
-
+  //leadership
   Experience.findOrCreate({
     where: { id: 2 },
     defaults: {
-      title: "Paycom Internship",
-      description: "Internship with Paycom",
+      title: "Soccer Team manager",
+      description: "Manage a minor league soccer team, help organiza games, events and funding",
       userId: 3,
-      startDate: "6/1/2022",
+      startDate: "6/1/2020",
       endDate: "8/8/2022",
-      organization: "Paycom",
+      organization: "MSL",
       city: "Oklahoma City",
       state: "OK",
-      experienceTypeId: 1
+      current : false,
+      chatHistory: [],
+      experienceTypeId: 2
     },
   });
+  //activity
+  Experience.findOrCreate({
+    where: { id: 3 },
+    defaults: {
+      title: "Church choir member",
+      description: "participate in a choir at church and often sings there on Sunday at mass",
+      userId: 3,
+      startDate: "6/1/2010",
+      endDate: "",
+      organization: "Church",
+      city: "Oklahoma City",
+      state: "OK",
+      current : true,
+      chatHistory: [],
+      experienceTypeId: 3
+    },
+  });
+  //Vounteer
+  Experience.findOrCreate({
+    where: { id: 4 },
+    defaults: {
+      title: "Animal shelter volunteer",
+      description: "Help taking care of animals at local animal Sheter",
+      userId: 3,
+      startDate: "8/1/2015",
+      endDate: "",
+      organization: "LocoShelter",
+      city: "Oklahoma City",
+      state: "OK",
+      current : true,
+      chatHistory: [],
+      experienceTypeId: 4
+    },
+  });
+  //Honor
+  Experience.findOrCreate({
+    where: { id: 5 },
+    defaults: {
+      title: "President Honor Roll",
+      description: "Listed in president honor roll for 4 years",
+      userId: 3,
+      startDate: "8/1/2018",
+      endDate: "6/1/2022",
+      organization: "Oklahoma Christian University",
+      city: "Oklahoma City",
+      state: "OK",
+      current : false,
+      chatHistory: [],
+      experienceTypeId: 5
+    },
+  });
+     //Awards
+  Experience.findOrCreate({
+    where: { id: 6 },
+    defaults: {
+      title: "Karaoke champion",
+      description: "Current Karaoke champion at Local neighborhood",
+      userId: 3,
+      startDate: "8/1/2024",
+      endDate: "",
+      organization: "Nickel hills",
+      city: "Oklahoma City",
+      state: "OK",
+      current : true,
+      chatHistory: [],
+      experienceTypeId: 6
+    },
+  });
+ 
 
   // Goal
   Goal.findOrCreate({
