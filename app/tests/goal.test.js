@@ -40,7 +40,7 @@ describe('POST /resume/goal/', () => {
   let id = -1;
   it('Returns Status Code 200', () => {
     test('Returns status code', async () => {
-      const res = await request(app.app).post("/resume/goal/user/3").send({
+      const res = await request(app.app).post("/resume/goal/").send({
         title: "Goal title",
         description: "Goal description",
         userId: 3
@@ -91,7 +91,7 @@ describe('POST /resume/goal/', () => {
       expect(res.statusCode).toBe(400);
     });
 
-    test('Returns status code 500 with userId null', async () => {
+    test('Returns status code 400 with userId null', async () => {
       const res = await request(app.app).post("/resume/goal/").send({
         title: "Goal title",
         description: "Goal description"
