@@ -55,7 +55,7 @@ exports.create = async (req, res) => {
         experienceTypeId : req.body.experienceTypeId,
         city: req.body.city,
         state: req.body.state,
-        organization: (req.body.organization != null) ? req.body.organization : "",
+        organization: req.body.organization,
         chatHistory: (req.body.chatHistory != null) ? req.body.chatHistory : [],
         current : (req.body.current != null) ? req.body.current : false
     };

@@ -43,6 +43,10 @@ module.exports = (sequelize, Sequelize) => {
       totalGPA: {
         type: Sequelize.DECIMAL(3,2),
         allowNull: false,
+      },
+      awards: {
+        type: Sequelize.TEXT,
+        allowNull: true,
       }
     });
     return education;
