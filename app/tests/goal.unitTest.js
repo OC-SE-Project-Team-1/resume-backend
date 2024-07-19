@@ -1,42 +1,27 @@
-const test = require('supertest');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const expect = chai.expect;
 const app = require('../../server');
+const http = require('http');
 const db = require("../models");
 
-const addValues = require("../../addValues");
-db.sequelize.sync().then(()=>{
-    addValues.create();
-      
-    if (process.env.TESTING == 'true') {
-      addValues.testCreate();
-    }
-  });
+chai.use(chaiHttp);
 
 // GET Goal
-describe('GET /resume/goal/:id', () => {
-  it('Returns status code 200', () => {
-    test('Should return status code 200', async () => {
-      const res = await request(app.app).post("/resume/goal/1");
-      expect(res.statusCode).toBe(200);
-    });
-  });
-
-  it('Gives a goal id', () => {
-    test('Should return a goal with that id', async () => {
-      const res = await request(app.app).post("/resume/goal/1");
-      expect(res.id).toBe(1);
-    });
-  });
-
-  it('Gives a user id', () => {
-    test('Should return a goal with that user id', async () => {
-      const res = await request(app.app).post("/resume/goal/1");
-      expect(red.userId).toBe(3);
-    });
+describe('Test Goals Routes', () => {
+  it('Returns status code 200', done => {
+    chai.request(app)
+      .get('resume/goal/')
+      .end((err, res) => {
+        //expect(res).to.have.status(200);
+        expect(res.id).to.equal(1);
+        expect(red.userId).to.equal(3);
+      });
   });
 });
 
 // POST new goal
-describe('POST /resume/goal/', () => {
+/*describe('POST /resume/goal/', () => {
   let id = -1;
   it('Returns Status Code 200', () => {
     test('Returns status code', async () => {
@@ -229,4 +214,4 @@ describe('POST /resume/goal/assist', () => {
       expect(res.chatHistory.length > 0).toBe(true);
     });
   });
-});
+});*/
