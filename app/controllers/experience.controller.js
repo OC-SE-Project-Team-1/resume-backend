@@ -43,10 +43,6 @@ exports.create = async (req, res) => {
         const error = new Error("experience Type Id cannot be empty for Experience");
         error.statusCode = 400;
         throw error;
-    } else if (req.body.organization === undefined) {
-        const error = new Error("Organization cannot be empty for Experience");
-        error.statusCode = 400;
-        throw error;
     } 
 
     // Create Experience
@@ -59,7 +55,7 @@ exports.create = async (req, res) => {
         experienceTypeId : req.body.experienceTypeId,
         city: req.body.city,
         state: req.body.state,
-        organization: req.body.organization,
+        organization: (req.body.organization != null) ? req.body.organization : "",
         chatHistory: (req.body.chatHistory != null) ? req.body.chatHistory : [],
         current : (req.body.current != null) ? req.body.current : false
     };
