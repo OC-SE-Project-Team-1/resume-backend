@@ -26,7 +26,7 @@ exports.SaveAIAssist = (hist, req, res) => {
     hist.push({ role: "CHATBOT", message: res });
     const response = {
         description: res,
-        history: hist
+        chatHistory: hist
     };
 
     return response;
