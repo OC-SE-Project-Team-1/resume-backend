@@ -72,13 +72,20 @@ exports.create = async () => {
       title : "Honor Experience"
     }
   });
-    //default Experience Type
-    ExperienceType.findOrCreate({
-      where : {id : 6},
-      defaults: {
-        title : "Award Experience"
-      }
-    });
+  //default Experience Type
+  ExperienceType.findOrCreate({
+    where : {id : 6},
+    defaults: {
+      title : "Award Experience"
+    }
+  });
+  //default Experience Type
+  ExperienceType.findOrCreate({
+    where : {id : 7},
+    defaults: {
+      title : "Project Experience"
+    }
+  });
 
     //admin user
   let salt = await getSalt();
