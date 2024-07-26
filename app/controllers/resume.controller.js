@@ -315,8 +315,7 @@ exports.delete = async (req, res) => {
         res.status(500).send({
             message: err.message || "Could not delete Resume with id=" + id,
         });
-    });
-    
+    }); 
 };
 
 //========== Cohere Functions ==========//

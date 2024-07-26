@@ -206,8 +206,7 @@ exports.generateAIDescription = async (req, res) => {
     let response = "";
     let request = "";
     let history = [];
-
-    if (req.body.chatHistory === undefined || req.body.chatHistory == []) {
+    if (req.body.chatHistory === undefined || JSON.stringify(req.body.chatHistory) === '[]') {
        
         request = GenerateCohereRequest(req.body.description);
     } else {
