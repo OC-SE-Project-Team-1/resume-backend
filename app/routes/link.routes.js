@@ -13,7 +13,7 @@ module.exports = (app) => {
     router.get("/link/user/:userId",[authenticateRoute, authenticateUserReq], link.findAllForUser);
   
     // Retrieve a single link with Id
-    router.get("/link/:id",[authenticateRoute, authenticateUserReq], link.findOne);
+    router.get("/link/:id",[authenticateRoute], link.findOne);
   
     // Update a link with Id
     router.put("/link/:id",[authenticateRoute, authenticateUserReq], link.update);

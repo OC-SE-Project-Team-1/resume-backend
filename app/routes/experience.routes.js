@@ -13,7 +13,7 @@ module.exports = (app) => {
     router.get("/experience/user/:userId", [authenticateRoute, authenticateUserReq], experience.findAllForUser);
   
     // Retrieve a single experience with Id
-    router.get("/experience/:id", [authenticateRoute, authenticateUserReq], experience.findOne);
+    router.get("/experience/:id", [authenticateRoute], experience.findOne);
 
     // AI Assist for experience
     router.post("/experience/assist", experience.generateAIDescription);

@@ -3,10 +3,10 @@ module.exports = (app) => {
     var router = require("express").Router();
     const { authenticateRoute, authenticateAdmin } = require("../authentication/authentication.js");
   
-    // Create a new goal
+    // Create a new experienceType
     router.post("/experienceType/", [authenticateRoute, authenticateAdmin], experienceType.create);
   
-    // Retrieve all goals
+    // Retrieve all experienceType
     router.get("/experienceType/", [authenticateRoute, authenticateAdmin], experienceType.findAll);
   
     // Update a experienceType with Id

@@ -16,7 +16,7 @@ module.exports = (app) => {
     router.get("/skill/user/:userId",[authenticateRoute, authenticateUserReq], skill.findAllForUser);
   
     // Retrieve a single skill with Id
-    router.get("/skill/:id",[authenticateRoute, authenticateUserReq], skill.findOne);
+    router.get("/skill/:id",[authenticateRoute], skill.findOne);
   
     // Update a skill with Id
     router.put("/skill/:id",[authenticateRoute, authenticateUserReq], skill.update);

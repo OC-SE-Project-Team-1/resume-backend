@@ -13,7 +13,7 @@ module.exports = (app) => {
     router.get("/jobDescription/user/:userId",[authenticateRoute, authenticateUserReq], jobDescription.findAllForUser);
   
     // Retrieve a single jobDescription with Id
-    router.get("/jobDescription/:id",[authenticateRoute, authenticateUserReq], jobDescription.findOne);
+    router.get("/jobDescription/:id",[authenticateRoute], jobDescription.findOne);
   
     // Update a jobDescription with Id
     router.put("/jobDescription/:id",[authenticateRoute, authenticateUserReq], jobDescription.update);

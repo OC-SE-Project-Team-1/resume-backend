@@ -13,7 +13,7 @@ module.exports = (app) => {
   router.get("/account/:id", [authenticateRoute], User.findOne);
 
   // Update a User with id
-  router.put("/account/:id", [authenticateRoute, authenticateUserReq,], User.update);
+  router.put("/account/:id", [authenticateRoute, authenticateUserReq], User.update);
 
   // Delete a User with id
   router.delete("/account/:id", [authenticateRoute, authenticateAdmin], User.delete);

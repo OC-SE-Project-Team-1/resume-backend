@@ -13,7 +13,7 @@ module.exports = (app) => {
     router.get("/education/user/:userId", [authenticateRoute, authenticateUserReq], education.findAllForUser);
   
     // Retrieve a single education with Id
-    router.get("/education/:id", [authenticateRoute, authenticateUserReq], education.findOne);
+    router.get("/education/:id", [authenticateRoute], education.findOne);
   
     // Update a education with Id
     router.put("/education/:id", [authenticateRoute, authenticateUserReq], education.update);

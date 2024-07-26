@@ -13,7 +13,7 @@ module.exports = (app) => {
     router.get("/goal/user/:userId",[authenticateRoute, authenticateUserReq], goal.findAllForUser);
   
     // Retrieve a single goal with Id
-    router.get("/goal/:id", [authenticateRoute, authenticateUserReq], goal.findOne);
+    router.get("/goal/:id", [authenticateRoute], goal.findOne);
 
     // AI Assist for Goals
     router.post("/goal/assist", goal.generateAIDescription);

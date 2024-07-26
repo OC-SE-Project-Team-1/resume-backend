@@ -3,10 +3,10 @@ module.exports = (app) => {
     var router = require("express").Router();
     const { authenticateRoute, authenticateAdmin } = require("../authentication/authentication.js");
   
-    // Create a new goal
+    // Create a new role
     router.post("/role/", [authenticateRoute, authenticateAdmin], role.create);
   
-    // Retrieve all goals
+    // Retrieve all role
     router.get("/role/", [authenticateRoute, authenticateAdmin], role.findAll);
   
     // Update a role with Id
