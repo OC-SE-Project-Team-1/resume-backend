@@ -47,6 +47,10 @@ module.exports = (sequelize, Sequelize) => {
       awards: {
         type: Sequelize.TEXT,
         allowNull: true,
+      },
+      studyAbroad: {
+        type: Sequelize.JSON,
+        allowNull: true,
       }
     });
     return education;
