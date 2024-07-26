@@ -258,7 +258,7 @@ const isAdminmistrator = await isAdmin(req, res);
             req.body.password = hash
           }
           if(req.body.salt != null){
-            return  res.status(500).send({ message: "Does not have permission to cahnge salt"});
+            return  res.status(500).send({ message: "Does not have permission to change salt"});
           }
           User.update(req.body, {
             where: { id: id },

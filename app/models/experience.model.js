@@ -30,7 +30,7 @@ module.exports = (sequelize, Sequelize) => {
       },
       organization: {
         type: Sequelize.STRING(50),
-        allowNull: false,
+        allowNull: true,
       },
       chatHistory: {
         type: Sequelize.JSON,

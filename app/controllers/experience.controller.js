@@ -43,10 +43,6 @@ exports.create = async (req, res) => {
         const error = new Error("experience Type Id cannot be empty for Experience");
         error.statusCode = 400;
         throw error;
-    } else if (req.body.organization === undefined) {
-        const error = new Error("Organization cannot be empty for Experience");
-        error.statusCode = 400;
-        throw error;
     } 
 
     // Create Experience
