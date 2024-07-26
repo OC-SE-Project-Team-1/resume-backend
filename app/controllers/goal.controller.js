@@ -219,7 +219,7 @@ exports.generateAIDescription = async (req, res) => {
     let request = "";
     let history = [];
 
-    if (req.body.chatHistory === undefined) {
+    if (req.body.chatHistory === undefined || req.body.chatHistory == []) {
         if (req.body.title === undefined) {
             const error = new Error("Title cannot be empty");
             error.statusCode = 400;
