@@ -131,6 +131,7 @@ exports.update = async (req, res) => {
         throw error;
     }
 
+    const id = req.params.id;
     const isDuplicateGoal = (req.body.title != null) ? await findDuplicateGoal(req.body.title, req.body.userId, req.params.id) : null;
 
     if (isDuplicateGoal) {
