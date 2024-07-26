@@ -245,49 +245,47 @@ exports.update = async (req, res) => {
             "This Resume is already in use",
         });
     } else {
-            console.log("Resume not found");
         const user = await getUser(req, res);
-        
-        //check if user ID = 2(Career service) and comments are filled
-         if(req.body.comments != null && user.roleId == 3){
-            return res.status(500).send({
-                message: "Cannot add/edit comment, user does not have permission",
+        const resume = Resume.findOne({where: { id: req.params.id, userId : req.body.userId }}).then((data)=> {return data})
+
+        const owner = req.body.userId == resume.userId ? true : false
+        let canEdit = false;
+
+        if (owner) canEdit = true
+        else{
+            if(user.roleId == 2 && editing){
+                if(req.body.title != null || req.body.content != null ||req.body.template != null){
+                    canEdit = false;
+                }
+                else canEdit = true;
+            }
+            else if(user.roleId == 1) canEdit = true;
+            else canEdit = false;
+        }
+
+        if (canEdit){
+            Resume.update(req.body, {
+                where: { id: req.params.id, userId : req.body.userId },
+            }).then((number) => {
+                if (number == 1) {
+                    res.send({
+                        message: "Resume was updated successfully.",
+                    });
+                } else {
+                    res.send({
+                        message: `Cannot update Resume with id=${id}. Maybe Resume was not found or req.body is empty!`,
+                    });
+                }
+            }).catch((err) => {
+                res.status(500).send({
+                    message: err.message || "Error updating Resume with id=" + id,
+                });
             });
         }
-        const editing = Resume.findOne({where: { id: req.params.id, userId : req.body.userId }}).then((data)=> {return data.editing})
+        else {
+            return res.status(500).send({message: "Cannot edit Resume, permission denied"});
+        }
         
-        //user with ID = 2(Career service)
-        if(user.roleId != 3){
-            //if comment are filled, but  editing = false
-            if(req.body.comments != null && !editing){
-                return res.status(500).send({message: "Cannot add/edit comment, resume owner does not allow for comments"});
-            }
-            // if other fields are filled, deny as careere service can only edit comments
-            if(req.body.title != null || req.body.content != null || req.body.rating != null || req.body.editing != null){
-                return res.status(500).send({message: "Cannot add/edit comment, resume owner does not allow for comments"});
-            }
-        }
-        //check if other students try to edit the current student resume
-        if(user.Id != req.body.userId && user.Role == 3){
-            return res.status(500).send({ message: "Cannot add/edit comment, not authorized to edit this resume",});
-        }
-        Resume.update(req.body, {
-            where: { id: req.params.id, userId : req.body.userId },
-        }).then((number) => {
-            if (number == 1) {
-                res.send({
-                    message: "Resume was updated successfully.",
-                });
-            } else {
-                res.send({
-                    message: `Cannot update Resume with id=${id}. Maybe Resume was not found or req.body is empty!`,
-                });
-            }
-        }).catch((err) => {
-            res.status(500).send({
-                message: err.message || "Error updating Resume with id=" + id,
-            });
-        });
     }
     
 };
