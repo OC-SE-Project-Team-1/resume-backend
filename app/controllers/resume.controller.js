@@ -249,7 +249,7 @@ exports.update = async (req, res) => {
         const user = await getUser(req, res);
         
         //check if user ID = 2(Career service) and comments are filled
-         if(req.body.comments != null && user.roleId != 2){
+         if(req.body.comments != null && user.roleId == 3){
             return res.status(500).send({
                 message: "Cannot add/edit comment, user does not have permission",
             });
@@ -257,7 +257,7 @@ exports.update = async (req, res) => {
         const editing = Resume.findOne({where: { id: req.params.id, userId : req.body.userId }}).then((data)=> {return data.editing})
         
         //user with ID = 2(Career service)
-        if(user.roleId == 2){
+        if(user.roleId != 3){
             //if comment are filled, but  editing = false
             if(req.body.comments != null && !editing){
                 return res.status(500).send({message: "Cannot add/edit comment, resume owner does not allow for comments"});
