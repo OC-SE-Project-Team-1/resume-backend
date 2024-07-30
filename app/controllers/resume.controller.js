@@ -360,5 +360,5 @@ exports.getJobFeedback = async (req, res) => {
     let request = GenerateCohereRequest(resume.content, jobDesc.description);
     let response = await cohere.SendCohereRequest(request, []);
 
-    res.send(response);
+    res.send({response: response});
 };

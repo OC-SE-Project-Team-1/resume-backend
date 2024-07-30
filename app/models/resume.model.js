@@ -13,7 +13,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
       },
       rating: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       editing: {
