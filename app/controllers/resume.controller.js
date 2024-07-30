@@ -246,12 +246,12 @@ exports.update = async (req, res) => {
         });
     } else {
         const user = await getUser(req, res);
-        const resume = Resume.findOne({where: { id: req.params.id, userId : req.body.userId }}).then((data)=> {return data})
+        const resume = await Resume.findOne({where: { id: req.params.id, userId : req.body.userId }}).then((data)=> {return data})
 
-        const owner = req.body.userId == resume.userId ? true : false
+        const owner = (user.id == resume.userId) ? true : false
         let canEdit = false;
 
-        if (owner) canEdit = true
+        if (owner) canEdit = true;
         else{
             if(user.roleId == 2 && editing){
                 if(req.body.title != null || req.body.content != null ||req.body.template != null){
