@@ -253,7 +253,7 @@ exports.update = async (req, res) => {
 
         if (owner) canEdit = true;
         else{
-            if(user.roleId == 2 && editing){
+            if(user.roleId == 2 && resume.editing){
                 if(req.body.title != null || req.body.content != null ||req.body.template != null){
                     canEdit = false;
                 }
