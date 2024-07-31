@@ -1,7 +1,7 @@
 {
-    "name": "fairytales-backend",
+    "name": "resume-backend",
     "version": "1.0.0",
-    "description": "fAIrytales Node.js with Rest API",
+    "description": "resume Node.js with Rest API",
     "main": "server.js",
     "scripts": {
         "test": "jest --",
