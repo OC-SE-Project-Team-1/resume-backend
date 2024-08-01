@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the RESUME_NAME_TBD." });
+  res.json({ message: "Welcome to the R.A.I.N." });
 });
 
 require("./app/routes/auth.routes.js")(app);
