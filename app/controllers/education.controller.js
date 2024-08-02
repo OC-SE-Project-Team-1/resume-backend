@@ -87,7 +87,8 @@ exports.create = async (req, res) => {
         courses: req.body.courses,
         minor: req.body.minor,
         totalGPA: req.body.totalGPA,
-        awards: req.body.awards
+        awards: req.body.awards,
+        studyAbroad: req.body.studyAbroad
     };
 
     const isDuplicateEducation = await findDuplicateEducation(req.body.organization, req.body.description, req.body.userId, 0);
