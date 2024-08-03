@@ -72,76 +72,76 @@ const isDuplicateUser = await findDuplicateUser(req.body.userName, 0);
 
   // find by email
 
-      if (isDuplicateEmail) {
-        return res.status(500).send({
-          message:
-            "This Email is already in use",
-        });
-      } else {
-            if (isDuplicateUser) {
-              return  res.status(500).send({
-                message:
-                  "This Username is already in use",
-              });
-            }
-            else{
-              console.log("email not found");
-      
-        let salt = await getSalt();
-        let hash = await hashPassword(req.body.password, salt);
-
-        // Create a User
-        const user = {
-          id : req.body.id,
-          roleId : req.body.roleId,
-          userName : req.body.userName,
-          email : req.body.email,
-          firstName : req.body.firstName,
-          lastName : req.body.lastName,
-          address : req.body.address,
-          darkMode : req.body.darkMode,
-          phoneNumber : req.body.phoneNumber,
-          password : hash,
-          salt : salt,
-        };
-
-        // Save User in the database
-        await User.create(user)
-          .then(async (data) => {
-            // Create a Session for the new user
-            let userId = data.id;
-
-            let expireTime = new Date();
-            expireTime.setDate(expireTime.getDate() + 1);
-
-            const session = {
-              email: req.body.email,
-              userId: userId,
-              expirationDate: expireTime,
-            };
-            await Session.create(session).then(async (data) => {
-              let sessionId = data.id;
-              let token = await encrypt(sessionId);
-              let userInfo = {
-                email: user.email,
-                userName: user.userName,
-                roleId : user.roleId,
-                id: userId,               
-                token: token,
-              };
-              res.send(userInfo);
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-            res.status(500).send({
+  if (isDuplicateEmail) {
+      return res.status(500).send({
+        message:
+          "This Email is already in use",
+      });
+    } else {
+          if (isDuplicateUser) {
+            return  res.status(500).send({
               message:
-                err.message || "Some error occurred while creating the User.",
+                "This Username is already in use",
             });
-          });
-            }
+          }
+          else{
+            console.log("email not found");
+    
+      let salt = await getSalt();
+      let hash = await hashPassword(req.body.password, salt);
 
+      // Create a User
+      const user = {
+        id : req.body.id,
+        roleId : req.body.roleId,
+        userName : req.body.userName,
+        email : req.body.email,
+        firstName : req.body.firstName,
+        lastName : req.body.lastName,
+        address : req.body.address,
+        darkMode : req.body.darkMode,
+        phoneNumber : req.body.phoneNumber,
+        password : hash,
+        salt : salt,
+      };
+
+      // Save User in the database
+      await User.create(user)
+        .then(async (data) => {
+          // Create a Session for the new user
+          let userId = data.id;
+
+          let expireTime = new Date();
+          expireTime.setDate(expireTime.getDate() + 1);
+
+          const session = {
+            email: req.body.email,
+            userId: userId,
+            expirationDate: expireTime,
+          };
+          await Session.create(session).then(async (data) => {
+            let sessionId = data.id;
+            let token = await encrypt(sessionId);
+            let userInfo = {
+              email: user.email,
+              userName: user.userName,
+              roleId : user.roleId,
+              id: userId,               
+              token: token,
+            };
+            res.send(userInfo);
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while creating the User.",
+          });
+        });
       }
+
+    }
 };
 
 // Retrieve all Users from the database.
@@ -195,9 +195,6 @@ exports.findByEmail = (req, res) => {
         res.send(data);
       } else {
         res.send({ email: "not found" });
-        /*res.status(404).send({
-          message: `Cannot find User with email=${email}.`
-        });*/
       }
     })
     .catch((err) => {
@@ -207,13 +204,13 @@ exports.findByEmail = (req, res) => {
     });
 };
 
-//search for current session
+// Search for current session
 async function isAdmin(req, res){
 
   let { userId } = await authenticate(req, res, "token");
   let user = {};
   if (userId !== undefined) {
-      //find and get user from db
+      // Find and get user from db
       await User.findByPk(userId).then(async (data) => { user = data });  
       return (user.roleId == 1);
   }
@@ -226,7 +223,7 @@ exports.update = async (req, res) => {
   const isDuplicateUser = (req.body.userName != null) ? await findDuplicateUser(req.body.userName, id) : false
   
 const isAdminmistrator = await isAdmin(req, res);
-//only let user with roleId = 1(admin) to change roleId of a user
+// Only let user with roleId = 1(admin) to change roleId of a user
   if(req.body.roleId != null && !isAdminmistrator){
     return res.status(500).send({
       message:

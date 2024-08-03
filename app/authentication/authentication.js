@@ -149,7 +149,8 @@ async function getRoleId(userId){
 authenticateUserReq = async (req, res, next) =>{
   let auth = req.get("authorization");
   let session = await getSes(auth);
-      //check session exist and if userId in the request belong to user
+  
+  // Check session exist and if userId in the request belong to user
   const roleId = await getRoleId(session.userId)
     if (session != null && (session.userId === req.body.userId || session.userId == req.params.userId
       || roleId === 1
@@ -166,7 +167,8 @@ authenticateUserReq = async (req, res, next) =>{
   authenticateCareerService= async (req, res, next) =>{
     let auth = req.get("authorization");
     let session = await getSes(auth);
-        //check session exist and if userId in the request belong to user
+    
+    // Check session exist and if userId in the request belong to user
     const roleId = await getRoleId(session.userId)
       if (session != null && (roleId === 2 || roleId === 1
       )) {
@@ -182,7 +184,8 @@ authenticateUserReq = async (req, res, next) =>{
   authenticateAdmin = async (req, res, next) =>{
     let auth = req.get("authorization");
     let session = await getSes(auth);
-    //check session exist and user is an admin
+    
+    // Check session exist and user is an admin
     var roleId = await getRoleId(session.userId)
       if (session != null && roleId === 1 ) {
             next();  
