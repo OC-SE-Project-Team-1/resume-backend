@@ -73,7 +73,7 @@ exports.findAll = (req, res) => {
     });
 };
 
-//  Update a Role by the id in the request
+// Update a Role by the id in the request
 exports.update = async (req, res) => {
     const id = req.params.id;
     const isDuplicateRole = await findDuplicateRole(req.body.title, id);
@@ -108,7 +108,7 @@ exports.update = async (req, res) => {
 // Delete a Role with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
-    //default values check
+    // Default values check
     Role.destroy({
             where: { id: id},
         }).then((number) => {

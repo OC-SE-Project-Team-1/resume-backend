@@ -73,7 +73,7 @@ exports.findAll = (req, res) => {
     });
 };
 
-//  Update a ExperienceType by the id in the request
+// Update a ExperienceType by the id in the request
 exports.update = async (req, res) => {
     const id = req.params.id;
         const isDuplicateExperienceType = await findDuplicateExperienceType(req.body.title);
@@ -108,7 +108,7 @@ exports.update = async (req, res) => {
 // Delete a ExperienceType with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
-    //default values check
+    // Default values check
     ExperienceType.destroy({
             where: { id: id},
         }).then((number) => {

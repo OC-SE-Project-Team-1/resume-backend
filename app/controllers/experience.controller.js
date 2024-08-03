@@ -128,7 +128,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-//  Update a Experience by the id in the request
+// Update a Experience by the id in the request
 exports.update = async (req, res) => {
     const id = req.params.id;
 
@@ -155,7 +155,7 @@ exports.update = async (req, res) => {
 // Delete a Experience with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
-    //default values check
+    // Default values check
     Exp.destroy({
             where: { id: id},
         }).then((number) => {

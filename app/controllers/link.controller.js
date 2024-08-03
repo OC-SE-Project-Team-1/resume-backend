@@ -122,7 +122,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-//  Update a Link by the id in the request
+// Update a Link by the id in the request
 exports.update = async (req, res) => {
     let id = req.params.id;
     const isDuplicateLink = req.body.url != null ? await findDuplicateLink(req.body.url, req.body.userId, id) : null;

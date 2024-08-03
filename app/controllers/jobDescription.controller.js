@@ -122,7 +122,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-//  Update a JobDescription by the id in the request
+// Update a JobDescription by the id in the request
 exports.update = async (req, res) => {
     if (req.body.userId === undefined) {
         const error = new Error("User ID cannot be empty");

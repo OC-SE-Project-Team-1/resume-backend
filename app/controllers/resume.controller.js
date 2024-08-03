@@ -29,13 +29,13 @@ async function findDuplicateResume(entry, userId, id){
     }
 }
 
-//search for current session user
+// Search for current session user
 async function getUser(req, res){
-    //get userId from session
+    // Get userId from session
     let { userId } = await authenticate(req, res, "token");
     let user = {};
     if (userId !== undefined) {
-        //find and get user from db
+        // Find and get user from db
         await User.findByPk(userId).then(async (data) => { user = data });  
         return user;
     }
@@ -85,47 +85,47 @@ exports.create = async (req, res) => {
         
         // Save Resume
         Resume.create(resume).then((data) => {
-            //add Goals
+            // Add Goals
             const goals = req.body.goalId;
             goals.forEach( async (goalId) => {
                 var goal = await Goal.findOne(
-                    //find a Goal that match Id and userId
+                    // Find a Goal that match Id and userId
                     {where: {id : goalId, userId : req.body.userId}}).then((item) => { return item});
                await data.addGoal(goal)
             });
 
-            //add Skills
+            // Add Skills
             const skills = req.body.skillId;
             skills.forEach( async (skillId) => {
                 var skill = await Skill.findOne(
-                    //find a Skill that match Id and userId
+                    // Find a Skill that match Id and userId
                     {where: {id : skillId, userId : req.body.userId}}).then((item) => { return item});
                await data.addSkill(skill)
             });
 
-            //add Experiences
+            // Add Experiences
             const experiences = req.body.experienceId;
             experiences.forEach( async (experiencelId) => {
                 var experience = await Experience.findOne(
-                    //find a Experience that match Id and userId
+                    // Find a Experience that match Id and userId
                     {where: {id : experiencelId, userId : req.body.userId}}).then((item) => { return item});
                await data.addExperience(experience)
             });
 
-             //add Educations
+             // Add Educations
              const educations = req.body.educationId;
              educations.forEach( async (educationId) => {
                  var education = await Education.findOne(
-                     //find a Education that match Id and userId
+                     // Find a Education that match Id and userId
                      {where: {id : educationId, userId : req.body.userId}}).then((item) => { return item});
                 await data.addEducation(education)
              });
 
-             //add Links
+             // Add Links
              const links = req.body.linkId;
              links.forEach( async (linkId) => {
                  var link = await Link.findOne(
-                     //find a Link that match Id and userId
+                     // Find a Link that match Id and userId
                      {where: {id : linkId, userId : req.body.userId}}).then((item) => { return item});
                 await data.addLink(link)
              });
@@ -141,7 +141,7 @@ exports.create = async (req, res) => {
 
 // Find all Resumes in the database
 exports.findAll = async (req, res) => {
-    //check if user is a student and deny request
+    // Check if user is a student and deny request
     const user = await getUser(req, res);
     if(user.roleId == 3 ){
         return res.status(500).send({
@@ -229,7 +229,7 @@ exports.findOne = async (req, res) => {
     res.send(resume)
 };
 
-//  Update a Resume by the id in the request
+// Update a Resume by the id in the request
 exports.update = async (req, res) => {
     if (req.body.userId === undefined) {
         const error = new Error("User ID cannot be empty");
