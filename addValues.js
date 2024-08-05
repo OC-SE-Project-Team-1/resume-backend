@@ -11,24 +11,24 @@ const Skill = db.skill;
 const Resume = db.resume;
 const { encrypt, getSalt, hashPassword } = require("./app/authentication/crypto");
 
-//default values
-//create when first construct table and ensure items did not exist before create
+// Default values
+// Create when first construct table and ensure items did not exist before create
 exports.create = async () => {
-  //default roles
+  // Default roles
   Role.findOrCreate({
     where : {id : 1},
     defaults: {
       title : "Administrator"
     }
   });
-  //default roles
+  // Default roles
   Role.findOrCreate({
     where : {id : 2},
     defaults: {
       title : "Career Service"
     }
   });
-  //default roles
+  // Default roles
   Role.findOrCreate({
     where : {id : 3},
     defaults: {
@@ -36,21 +36,21 @@ exports.create = async () => {
     }
   });
 
-  //default Experience Type
+  // Default Experience Type
   ExperienceType.findOrCreate({
     where : {id : 1},
     defaults: {
       title : "Work Experience"
     }
   });
-  //default Experience Type
+  // Default Experience Type
   ExperienceType.findOrCreate({
     where : {id : 2},
     defaults: {
       title : "Leadership Experience"
     }
   });
-  //default Experience Type
+  // Default Experience Type
   ExperienceType.findOrCreate({
     where : {id : 3},
     defaults: {
@@ -58,28 +58,28 @@ exports.create = async () => {
       title : "Activities Experience"
     }
   });
-  //default Experience Type
+  // Default Experience Type
   ExperienceType.findOrCreate({
     where : {id : 4},
     defaults: {
       title : "Volunteer Experience"
     }
   });
-  //default Experience Type
+  // Default Experience Type
   ExperienceType.findOrCreate({
     where : {id : 5},
     defaults: {
       title : "Honor Experience"
     }
   });
-  //default Experience Type
+  // Default Experience Type
   ExperienceType.findOrCreate({
     where : {id : 6},
     defaults: {
       title : "Award Experience"
     }
   });
-  //default Experience Type
+  // Default Experience Type
   ExperienceType.findOrCreate({
     where : {id : 7},
     defaults: {
@@ -87,7 +87,7 @@ exports.create = async () => {
     }
   });
 
-    //admin user
+    // Admin user
   let salt = await getSalt();
   let hash = await hashPassword("password", salt);
   User.findOrCreate({
@@ -105,7 +105,8 @@ exports.create = async () => {
       salt: salt
     },
   });
-}//end function
+}
+// End function
 
 
 exports.testCreate = async () => {
@@ -187,7 +188,7 @@ exports.testCreate = async () => {
   });
 
   // Experiences
-  //work
+  // Work
   Experience.findOrCreate({
     where: { id: 1 },
     defaults: {
@@ -204,7 +205,7 @@ exports.testCreate = async () => {
       experienceTypeId: 1
     },
   });
-  //leadership
+  // Leadership
   Experience.findOrCreate({
     where: { id: 2 },
     defaults: {
@@ -221,7 +222,7 @@ exports.testCreate = async () => {
       experienceTypeId: 2
     },
   });
-  //activity
+  // Activity
   Experience.findOrCreate({
     where: { id: 3 },
     defaults: {
@@ -237,7 +238,7 @@ exports.testCreate = async () => {
       experienceTypeId: 3
     },
   });
-  //Vounteer
+  // Vounteer
   Experience.findOrCreate({
     where: { id: 4 },
     defaults: {
@@ -253,7 +254,7 @@ exports.testCreate = async () => {
       experienceTypeId: 4
     },
   });
-  //Honor
+  // Honor
   Experience.findOrCreate({
     where: { id: 5 },
     defaults: {
@@ -270,7 +271,7 @@ exports.testCreate = async () => {
       experienceTypeId: 5
     },
   });
-     //Awards
+  // Awards
   Experience.findOrCreate({
     where: { id: 6 },
     defaults: {

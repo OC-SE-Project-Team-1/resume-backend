@@ -23,13 +23,13 @@ var corsOptions = {
 app.use(cors(corsOptions));
 app.options("*", cors());
 
-// parse requests of content-type - application/json
+// Parse requests of content-type - application/json
 app.use(express.json());
 
-// parse requests of content-type - application/x-www-form-urlencoded
+// Parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-// simple route
+// Simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the R.A.I.N." });
 });
@@ -46,7 +46,7 @@ require("./app/routes/jobDescription.routes.js")(app);
 require("./app/routes/experienceType.routes.js")(app);
 require("./app/routes/link.routes.js")(app);
 
-// set port, listen for requests
+// Set port, listen for requests
 const PORT = process.env.PORT || 3036;
 if (process.env.NODE_ENV !== "test") {
   app.listen(PORT, () => {
