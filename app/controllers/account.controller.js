@@ -181,29 +181,6 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Find a single User with an email
-exports.findByEmail = (req, res) => {
-  const email = req.params.email;
-
-  User.findOne({
-    where: {
-      email: email,
-    },
-  })
-    .then((data) => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.send({ email: "not found" });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Error retrieving User with email=" + email,
-      });
-    });
-};
-
 // Search for current session
 async function isAdmin(req, res){
 
