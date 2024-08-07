@@ -27,7 +27,7 @@ db.jobDescription = require("./jobDescription.model.js")(sequelize, Sequelize);
 db.experienceType = require("./experienceType.model.js")(sequelize, Sequelize);
 db.link = require("./link.model.js")(sequelize, Sequelize);
 
-// foreign key for session
+// Foreign key for session
 db.user.hasMany(
   db.session,
   { as: "session" },
@@ -39,7 +39,7 @@ db.session.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for goals
+// Foreign key for goals
 db.user.hasMany(
   db.goal,
   { as: "goal" },
@@ -51,7 +51,7 @@ db.goal.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for skills
+// Foreign key for skills
 db.user.hasMany(
   db.skill,
   { as: "skill" },
@@ -63,7 +63,7 @@ db.skill.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for experiences
+// Foreign key for experiences
 db.user.hasMany(
   db.experience,
   { as: "experience" },
@@ -75,7 +75,7 @@ db.experience.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for user with role
+// Foreign key for user with role
 db.role.hasMany(
   db.user,
   { as: "user" },
@@ -87,7 +87,7 @@ db.user.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for resume with user
+// Foreign key for resume with user
 db.user.hasMany(
   db.resume,
   { as: "resume" },
@@ -99,7 +99,7 @@ db.resume.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for education
+// Foreign key for education
 db.user.hasMany(
   db.education,
   { as: "education" },
@@ -111,7 +111,7 @@ db.education.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for job description
+// Foreign key for jobDescription
 db.user.hasMany(
   db.jobDescription,
   { as: "jobDescription" },
@@ -122,7 +122,7 @@ db.jobDescription.belongsTo(
   { as: "user" },
 );
 
-// foreign key for experienceType
+// Foreign key for experienceType
 db.experienceType.hasMany(
   db.experience,
   { as: "experience" },
@@ -134,7 +134,7 @@ db.experience.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for Links
+// Foreign key for Links
 db.user.hasMany(
   db.link,
   { as: "link" },
@@ -145,8 +145,9 @@ db.link.belongsTo(
   { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
+
 //---------------------------RESUME FOREIGN KEYS---------------------------
-//Resume Relationship with Goal
+// Resume Relationship with Goal
 db.resume.belongsToMany(
   db.goal,
  { as: "Goal" ,
@@ -159,7 +160,7 @@ db.goal.belongsToMany(
   through : "Resume_Goal"
   }
 );
-//Resume Relationship with Experience
+// Resume Relationship with Experience
 db.resume.belongsToMany(
   db.experience,
  { as: "Experience" ,
@@ -172,7 +173,7 @@ db.experience.belongsToMany(
   through : "Resume_Experience"
   }
 );
-//Resume Relationship with Skill
+// Resume Relationship with Skill
 db.resume.belongsToMany(
   db.skill,
  { as: "Skill" ,
@@ -185,7 +186,7 @@ db.skill.belongsToMany(
   through : "Resume_Skill"
   }
 );
-//Resume Relationship with Education
+// Resume Relationship with Education
 db.resume.belongsToMany(
   db.education,
  { as: "Education" ,
@@ -198,7 +199,7 @@ db.education.belongsToMany(
   through : "Resume_Education"
   }
 );
-//Resume Relationship with Link
+// Resume Relationship with Link
 db.resume.belongsToMany(
   db.link,
  { as: "Link" ,
